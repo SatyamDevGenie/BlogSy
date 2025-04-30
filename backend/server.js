@@ -5,6 +5,7 @@ import chalk from "chalk";               // 🎨 Stylish console logs
 import cors from "cors";                 // 🌐 Enable CORS
 import connectDB from "./config/db.js";  // 🔗 MongoDB connection
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js"; // ❌ Error handlers
+import authRoutes from "./routes/authRoutes.js"
 
 dotenv.config();    // 📂 Load .env variables
 connectDB();        // 🧬 Connect to MongoDB
@@ -19,6 +20,11 @@ app.use(cors());         // 🔓 Allow cross-origin requests
 app.get("/", (req, res) => {
   res.send("BlogSy API is running"); // 🟢 API Health Check
 });
+
+
+// Main Routes
+app.use('/api/users', authRoutes);
+
 
 // ❌ Error handling middlewares
 app.use(notFound);      // 404 Not Found
