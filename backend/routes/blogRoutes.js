@@ -5,6 +5,7 @@ import {
   deleteBlog,
   getAllBlogs,
   getSingleBlog,
+  likeBlog,
 } from "../controllers/blogController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
@@ -24,5 +25,8 @@ router.get("/", getAllBlogs);
 
 // 🔍 Get a single blog
 router.get("/:id", getSingleBlog);
+
+// ❤️ Like or Unlike a blog (Protected)
+router.put("/:id/like", protect, likeBlog);
 
 export default router;

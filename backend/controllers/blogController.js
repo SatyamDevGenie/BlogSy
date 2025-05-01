@@ -120,4 +120,40 @@ const getSingleBlog = async (req, res) => {
   }
 };
 
-export { createBlog, updateBlog, deleteBlog, getAllBlogs, getSingleBlog };
+// ❤️ Like / Unlike Blog
+const likeBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    const userId = req.user._id;
+
+    if (!blog.likes.includes(userId)) {
+      blog.likes.push(userId);
+    } else {
+      blog.likes.pull(userId);
+    }
+
+    await blog.save();
+
+    // Fetch updated blog with usernames of liked users
+    const updatedBlog = await Blog.findById(req.params.id)
+      .populate("likes", "_id username") // 👈 This adds username in the likes array
+      .populate("author", "_id username");
+
+    res.json(updatedBlog);
+  } catch (error) {
+    res.status(500).json({ message: "Server error while liking blog", error });
+  }
+};
+export {
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  getAllBlogs,
+  getSingleBlog,
+  likeBlog,
+};
