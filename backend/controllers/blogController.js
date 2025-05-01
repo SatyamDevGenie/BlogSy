@@ -25,5 +25,38 @@ const createBlog = async (req, res) => {
   }
 };
 
+// ✏️ Update Blog
+const updateBlog = async (req, res) => {
+  const { title, content, image } = req.body;
 
-export {createBlog}
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    // 🛡️ Check if the logged-in user is the blog's author
+    if (blog.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message:
+          "You're not allowed to edit this blog. Only the author can update it.",
+      });
+    }
+
+    // ✏️ Update the fields
+    blog.title = title || blog.title;
+    blog.content = content || blog.content;
+    blog.image = image !== undefined ? image : blog.image;
+
+    const updatedBlog = await blog.save();
+    res.status(200).json(updatedBlog);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error while updating blog",
+      error: error.message,
+    });
+  }
+};
+
+export { createBlog, updateBlog };
