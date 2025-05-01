@@ -151,6 +151,7 @@ const likeBlog = async (req, res) => {
 };
 
 // 💬 Comment on Blog
+// 💬 Comment on Blog
 const commentBlog = async (req, res) => {
   const { comment } = req.body;
 
@@ -167,11 +168,17 @@ const commentBlog = async (req, res) => {
     });
 
     await blog.save();
-    res.json(blog);
+
+    // Refetch blog and populate comments' user with username
+    const updatedBlog = await Blog.findById(req.params.id)
+      .populate('comments.user', 'username');
+
+    res.json(updatedBlog);
   } catch (error) {
     res.status(500).json({ message: "Server error while commenting", error });
   }
 };
+
 
 export {
   createBlog,
