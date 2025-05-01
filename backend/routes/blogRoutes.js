@@ -3,13 +3,22 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  getAllBlogs,
 } from "../controllers/blogController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/create", protect, createBlog); // create blog
-router.put("/:id", protect, updateBlog); // Update blog
+// 📌 Create a new blog (protected)
+router.post("/create", protect, createBlog);
+
+// ✏️ Update a blog (protected)
+router.put("/:id", protect, updateBlog);
+
+// 🗑️ Delete a blog (protected)
 router.delete("/:id", protect, deleteBlog);
+
+// 📚 Get all blogs
+router.get("/", getAllBlogs);
 
 export default router;

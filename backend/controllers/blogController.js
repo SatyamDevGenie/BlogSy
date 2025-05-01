@@ -86,4 +86,19 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-export { createBlog, updateBlog, deleteBlog };
+// 📚 Get All Blogs
+const getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find()
+      .populate("author", "_id username") // 👤 Include author info
+      .sort({ createdAt: -1 }); // 🕒 Newest first
+
+    res.json(blogs);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Server error while fetching blogs", error });
+  }
+};
+
+export { createBlog, updateBlog, deleteBlog, getAllBlogs };
