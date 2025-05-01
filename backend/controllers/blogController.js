@@ -101,4 +101,23 @@ const getAllBlogs = async (req, res) => {
   }
 };
 
-export { createBlog, updateBlog, deleteBlog, getAllBlogs };
+// 🔍 Get Single Blog
+const getSingleBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id)
+      .populate("author", "_id username") // 👤 Populate author
+      .populate("comments.user", "_id username"); // 💬 Populate comment users
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res.json(blog);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Server error while fetching blog", error });
+  }
+};
+
+export { createBlog, updateBlog, deleteBlog, getAllBlogs, getSingleBlog };

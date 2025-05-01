@@ -4,6 +4,7 @@ import {
   updateBlog,
   deleteBlog,
   getAllBlogs,
+  getSingleBlog,
 } from "../controllers/blogController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
@@ -20,5 +21,8 @@ router.delete("/:id", protect, deleteBlog);
 
 // 📚 Get all blogs
 router.get("/", getAllBlogs);
+
+// 🔍 Get a single blog
+router.get("/:id", getSingleBlog);
 
 export default router;
