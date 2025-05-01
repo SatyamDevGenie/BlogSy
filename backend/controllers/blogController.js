@@ -149,6 +149,30 @@ const likeBlog = async (req, res) => {
     res.status(500).json({ message: "Server error while liking blog", error });
   }
 };
+
+// 💬 Comment on Blog
+const commentBlog = async (req, res) => {
+  const { comment } = req.body;
+
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    blog.comments.push({
+      user: req.user._id,
+      comment,
+    });
+
+    await blog.save();
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ message: "Server error while commenting", error });
+  }
+};
+
 export {
   createBlog,
   updateBlog,
@@ -156,4 +180,5 @@ export {
   getAllBlogs,
   getSingleBlog,
   likeBlog,
+  commentBlog,
 };
