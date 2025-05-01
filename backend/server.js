@@ -6,6 +6,7 @@ import cors from "cors";                 // 🌐 Enable CORS
 import connectDB from "./config/db.js";  // 🔗 MongoDB connection
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js"; // ❌ Error handlers
 import authRoutes from "./routes/authRoutes.js"
+import blogRoutes from "./routes/blogRoutes.js"
 
 dotenv.config();    // 📂 Load .env variables
 connectDB();        // 🧬 Connect to MongoDB
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 
 // Main Routes
 app.use('/api/users', authRoutes);
+app.use('/api/blogs', blogRoutes)
 
 
 // ❌ Error handling middlewares
