@@ -1,18 +1,38 @@
 import colors from "colors";
 import dotenv from "dotenv";
-
 import connectDB from "./config/db.js";
+
 import users from "./data/users.js";
+import blogs from "./data/blogs.js";
+
 import User from "./models/User.js";
+import Blog from "./models/Blog.js";
 
 dotenv.config();
 connectDB();
 
-const importUsers = async () => {
+const importData = async () => {
   try {
-    await User.deleteMany(); // 🧹 Clear existing users
-    const createdUsers = await User.insertMany(users); // ➕ Insert new users
-    console.log("✅ 👥 Users Imported!".green.inverse);
+    // 🔄 Clear existing data
+    await User.deleteMany();
+    await Blog.deleteMany();
+
+    // 👥 Insert users
+    const createdUsers = await User.insertMany(users);
+
+    // 👤 Use first user (Admin) as blog author
+    const adminUserId = createdUsers[0]._id;
+
+    // 📝 Attach author to each blog
+    const sampleBlogs = blogs.map((blog) => ({
+      ...blog,
+      author: adminUserId,
+    }));
+
+    // ➕ Insert blogs
+    await Blog.insertMany(sampleBlogs);
+
+    console.log("✅ 👥 Users & 📝 Blogs Imported!".green.inverse);
     process.exit();
   } catch (err) {
     console.error(`❌ 🔴 ${err}`.red.inverse);
@@ -20,10 +40,12 @@ const importUsers = async () => {
   }
 };
 
-const destroyUsers = async () => {
+const destroyData = async () => {
   try {
-    await User.deleteMany(); // 🗑️ Clear users
-    console.log("🧨 🔴 Users Destroyed!".red.inverse);
+    await User.deleteMany();
+    await Blog.deleteMany();
+
+    console.log("🧨 🔴 Users & Blogs Destroyed!".red.inverse);
     process.exit();
   } catch (err) {
     console.error(`❌ 🔴 ${err}`.red.inverse);
@@ -31,11 +53,11 @@ const destroyUsers = async () => {
   }
 };
 
-// ℹ️ Usage
-// Run with: node seeder.js       → 👥 Import users
-// Run with: node seeder.js -d    → 🧨 Destroy users
+// 🛠️ Usage
+// node seeder.js       → import users + blogs
+// node seeder.js -d    → delete all users + blogs
 if (process.argv[2] === "-d") {
-  destroyUsers();
+  destroyData();
 } else {
-  importUsers();
+  importData();
 }
