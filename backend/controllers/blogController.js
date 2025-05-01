@@ -59,4 +59,31 @@ const updateBlog = async (req, res) => {
   }
 };
 
-export { createBlog, updateBlog };
+// 🗑️ Delete Blog
+const deleteBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    if (blog.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message:
+          "You're not allowed to delete this blog. Only the author can delete it.",
+      });
+    }
+
+    await blog.deleteOne();
+
+    res.status(200).json({ message: "Blog deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error while deleting blog",
+      error: error.message,
+    });
+  }
+};
+
+export { createBlog, updateBlog, deleteBlog };
