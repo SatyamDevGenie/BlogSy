@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema(
     isAdmin: { type: Boolean, default: false }, // ✅ Add this line
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // ➕ Followed users
     favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], // ⭐ Favorite blogs
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // ⭐ Added This Schema
+
   },
   { timestamps: true } // 🕒 createdAt & updatedAt fields
 );
