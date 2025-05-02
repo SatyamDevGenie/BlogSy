@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 
 // Main Routes
-app.use('/api/users', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes)
 
 
