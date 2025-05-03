@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Blog from "../models/Blog.js";
 
 // 👤 Follow user
 const followUser = async (req, res) => {
@@ -62,4 +63,33 @@ const addFavourite = async (req, res) => {
   }
 };
 
-export { followUser, addFavourite };
+// 📄 Get user profile
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate("followers", "username")
+      .populate("following", "username")
+      .populate({
+        path: "favourites",
+        populate: { path: "author", select: "username" },
+      });
+
+    const blogs = await Blog.find({ author: req.user._id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User profile not found" });
+    }
+
+    res.json({ user, blogs });
+  } catch (error) {
+    console.error("Get profile error:", error);
+    res
+      .status(500)
+      .json({
+        message: "Server error while getting profile",
+        error: error.message,
+      });
+  }
+};
+
+export { followUser, addFavourite, getUserProfile };
