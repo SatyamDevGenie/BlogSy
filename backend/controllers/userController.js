@@ -36,4 +36,30 @@ const followUser = async (req, res) => {
   }
 };
 
-export { followUser };
+// ⭐ Add blog to favourites
+const addFavourite = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.favourites.includes(blogId)) {
+      user.favourites.push(blogId);
+      await user.save();
+      return res.json({ message: "Blog added to favourites" });
+    } else {
+      return res.status(400).json({ message: "Blog already in favourites" });
+    }
+  } catch (error) {
+    console.error("Add favourite error:", error);
+    res.status(500).json({
+      message: "Server error while adding to favourites",
+      error: error.message,
+    });
+  }
+};
+
+export { followUser, addFavourite };
