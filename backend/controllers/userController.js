@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Blog from "../models/Blog.js";
+import bcrypt from "bcryptjs";
 
 // 👤 Follow user
 const followUser = async (req, res) => {
@@ -83,13 +84,49 @@ const getUserProfile = async (req, res) => {
     res.json({ user, blogs });
   } catch (error) {
     console.error("Get profile error:", error);
-    res
-      .status(500)
-      .json({
-        message: "Server error while getting profile",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Server error while getting profile",
+      error: error.message,
+    });
   }
 };
 
-export { followUser, addFavourite, getUserProfile };
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update allowed fields
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+
+    // Handle password change (if provided)
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      message: "User profile updated successfully",
+      user: {
+        _id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({
+      message: "Server error while updating profile",
+      error: error.message,
+    });
+  }
+};
+
+export { followUser, addFavourite, getUserProfile, updateUserProfile };
