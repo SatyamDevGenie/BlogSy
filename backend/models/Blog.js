@@ -13,10 +13,12 @@ const blogSchema = new mongoose.Schema(
       required: true, // 🧑‍💻 Reference to blog author
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // ❤️ Users who liked
+    views: { type: Number, default: 0 }, // 👈 For trending
     comments: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // 💬 Commenting user
         comment: { type: String }, // 💭 Comment text
+        createdAt: { type: Date, default: Date.now }
       },
     ],
   },
