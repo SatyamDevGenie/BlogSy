@@ -105,6 +105,34 @@ const addFavourite = async (req, res) => {
   }
 };
 
+// ⭐ Remove blog from favourites
+const removeFavourite = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.favourites.includes(blogId)) {
+      user.favourites = user.favourites.filter(
+        (id) => id.toString() !== blogId
+      );
+      await user.save();
+      return res.json({ message: "Blog removed from favourites" });
+    } else {
+      return res.status(400).json({ message: "Blog not found in favourites" });
+    }
+  } catch (error) {
+    console.error("Remove favourite error:", error);
+    res.status(500).json({
+      message: "Server error while removing from favourites",
+      error: error.message,
+    });
+  }
+};
+
 // 📄 Get user profile
 const getUserProfile = async (req, res) => {
   try {
@@ -174,6 +202,7 @@ export {
   followUser,
   unfollowUser,
   addFavourite,
+  removeFavourite,
   getUserProfile,
   updateUserProfile,
 };

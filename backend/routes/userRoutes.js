@@ -3,6 +3,7 @@ import {
   followUser,
   unfollowUser,
   addFavourite,
+  removeFavourite,
   getUserProfile,
   updateUserProfile,
 } from "../controllers/userController.js";
@@ -12,7 +13,8 @@ const router = express.Router();
 
 router.put("/follow/:id", protect, followUser);
 router.put("/unfollow/:id", protect, unfollowUser);
-router.put("/favourite/:id", protect, addFavourite);
+router.put("/favourites/:id", protect, addFavourite);
+router.delete("/favourites/:id", protect, removeFavourite);
 router.get("/profile", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);
 
