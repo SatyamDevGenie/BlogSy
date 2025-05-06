@@ -170,15 +170,16 @@ const commentBlog = async (req, res) => {
     await blog.save();
 
     // Refetch blog and populate comments' user with username
-    const updatedBlog = await Blog.findById(req.params.id)
-      .populate('comments.user', 'username');
+    const updatedBlog = await Blog.findById(req.params.id).populate(
+      "comments.user",
+      "username"
+    );
 
     res.json(updatedBlog);
   } catch (error) {
     res.status(500).json({ message: "Server error while commenting", error });
   }
 };
-
 
 export {
   createBlog,

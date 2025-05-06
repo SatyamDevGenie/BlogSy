@@ -38,6 +38,47 @@ const followUser = async (req, res) => {
   }
 };
 
+// 👤 Unfollow user
+const unfollowUser = async (req, res) => {
+  try {
+    const targetUser = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (!targetUser || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prevent self-unfollow
+    if (targetUser._id.equals(currentUser._id)) {
+      return res.status(400).json({ message: "You can't unfollow yourself" });
+    }
+
+    // Check if the user is following before removing
+    const isFollowing = targetUser.followers.includes(currentUser._id);
+
+    if (!isFollowing) {
+      return res
+        .status(400)
+        .json({ message: "You are not following this user" });
+    }
+
+    // Remove from followers & following
+    targetUser.followers.pull(currentUser._id);
+    currentUser.following.pull(targetUser._id);
+
+    await targetUser.save();
+    await currentUser.save();
+
+    return res.json({ message: "User unfollowed successfully" });
+  } catch (error) {
+    console.error("Unfollow error:", error);
+    res.status(500).json({
+      message: "Server error while unfollowing user",
+      error: error.message,
+    });
+  }
+};
+
 // ⭐ Add blog to favourites
 const addFavourite = async (req, res) => {
   try {
@@ -129,4 +170,10 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-export { followUser, addFavourite, getUserProfile, updateUserProfile };
+export {
+  followUser,
+  unfollowUser,
+  addFavourite,
+  getUserProfile,
+  updateUserProfile,
+};
