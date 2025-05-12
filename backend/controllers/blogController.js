@@ -105,11 +105,20 @@ const getAllBlogs = async (req, res) => {
 const getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id)
-      .populate("author", "_id username") // 👤 Populate author
-      .populate("comments.user", "_id username"); // 💬 Populate comment users
+      .populate("author", "_id username") // 👤 Author
+      .populate("comments.user", "_id username") // 💬 Comment users
+      .populate("viewedBy", "_id username"); // 👁️ Viewers
 
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
+    }
+
+    const userId = req.user?._id;
+
+    if (userId && !blog.viewedBy.some((user) => user._id.equals(userId))) {
+      blog.views += 1;
+      blog.viewedBy.push(userId);
+      await blog.save();
     }
 
     res.json(blog);

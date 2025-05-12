@@ -25,7 +25,7 @@ router.delete("/:id", protect, deleteBlog);
 router.get("/", getAllBlogs);
 
 // 🔍 Get a single blog
-router.get("/:id", getSingleBlog);
+router.get("/:id", protect, getSingleBlog);
 
 // ❤️ Like or Unlike a blog (Protected)
 router.put("/:id/like", protect, likeBlog);
