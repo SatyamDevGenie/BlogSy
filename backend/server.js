@@ -3,39 +3,49 @@ import dotenv from "dotenv"; // 🛠️ Load environment variables
 import express from "express"; // 🚀 Create Express app
 import chalk from "chalk"; // 🎨 Stylish console logs
 import cors from "cors"; // 🌐 Enable CORS
+import path from "path"; // 📁 For static file handling
+import { fileURLToPath } from "url"; // 📍 For ES module __dirname workaround
 import connectDB from "./config/db.js"; // 🔗 MongoDB connection
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js"; // ❌ Error handlers
+
+// 🛣️ Routes
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js"; // 📤 File upload route
 
+// ⚙️ Environment Setup
 dotenv.config(); // 📂 Load .env variables
 connectDB(); // 🧬 Connect to MongoDB
 
 const app = express(); // 🖥️ Initialize Express server
 
-// 🔧 Middlewares
+// 🛠️ Middlewares
 app.use(express.json()); // 📨 Parse JSON request body
 app.use(cors()); // 🔓 Allow cross-origin requests
 
-// ✅ Root route
+// 📁 Handle static folder for uploaded files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // Serve uploaded files
+
+// ✅ API Health Check
 app.get("/", (req, res) => {
-  res.send("BlogSy API is running"); // 🟢 API Health Check
+  res.send("BlogSy API is running");
 });
 
-// Main Routes
+// 🛣️ API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/upload", uploadRoutes); // File upload route
 
 // ❌ Error handling middlewares
 app.use(notFound); // 404 Not Found
 app.use(errorHandler); // General error handler
 
-// ⚙️ Set port
-const PORT = process.env.PORT || 5000;
-
 // 🚀 Start server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(
     chalk.yellowBright(
