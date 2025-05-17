@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { motion } from "framer-motion";
 import {
   UserIcon,
@@ -11,20 +10,21 @@ import {
   ArrowLeftIcon,
 } from "lucide-react";
 
+import { updateProfile, reset } from "../features/auth/authSlice"; // adjust the path if needed
+
 export default function UpdateProfilePage() {
-  const { user } = useSelector((state) => state.auth);
-  const token = user?.token;
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { user, isSuccess, isError, message } = useSelector((state) => state.auth);
+  const token = user?.token;
 
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
 
-  // Load existing user data
   useEffect(() => {
     if (!token) {
       setError("You must be logged in to update your profile.");
@@ -35,27 +35,34 @@ export default function UpdateProfilePage() {
       email: user.email || "",
       password: "",
     });
-  }, [token, user]);
+
+    return () => {
+      dispatch(reset()); // Clear success/error messages on unmount
+    };
+  }, [token, user, dispatch]);
+
+  const [localMessage, setLocalMessage] = useState(null);
+  const [localError, setLocalError] = useState(null);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setLocalMessage("Profile updated successfully!");
+    }
+    if (isError) {
+      setLocalError(message);
+    }
+  }, [isSuccess, isError, message]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      setError(null);
-      setMessage(null);
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.put("/api/users/profile", formData, config);
-      setMessage(data.message);
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Failed to update profile. Please try again."
-      );
-    }
+    setLocalMessage(null);
+    setLocalError(null);
+    dispatch(updateProfile(formData));
   };
 
   return (
@@ -75,24 +82,24 @@ export default function UpdateProfilePage() {
         Update Profile
       </motion.h2>
 
-      {message && (
+      {localMessage && (
         <motion.p
           className="text-green-600 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {message}
+          {localMessage}
         </motion.p>
       )}
-      {error && (
+      {localError && (
         <motion.p
           className="text-red-600 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {error}
+          {localError}
         </motion.p>
       )}
 
@@ -182,3 +189,18 @@ export default function UpdateProfilePage() {
     </motion.div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
