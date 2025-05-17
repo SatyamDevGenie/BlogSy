@@ -160,6 +160,8 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+
+// Update User Profile
 const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
