@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import About from "./pages/About";
 import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
+import SingleBlogPage from "./pages/SingleBlogPage";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+          <Route path="/blogs/:id" element={<SingleBlogPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/about" element={<About />} />
