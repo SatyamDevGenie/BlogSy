@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBlog, resetBlog } from "../features/blog/blogSlice";
+import { createBlog} from "../features/blog/blogSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
@@ -24,17 +25,7 @@ export default function CreateBlogPage() {
     }
   }, [user, navigate]);
 
-  useEffect(() => {
-  if (isSuccess) {
-    dispatch(resetBlog());
-    navigate("/"); // Redirect to homepage silently
-  }
 
-  if (isError) {
-    alert(`Failed: ${message}`);
-    dispatch(resetBlog());
-  }
-}, [isSuccess, isError, message, dispatch, navigate]);
 
   const handleImageUpload = async () => {
     if (!imageFile) return null;
@@ -71,6 +62,26 @@ export default function CreateBlogPage() {
     };
 
     dispatch(createBlog(blogData));
+    navigate("/")
+    
+      // Show success toast
+     toast.success("Blog created successfully!", {
+  style: {
+    fontSize: "14px",
+    padding: "10px 16px",
+    borderRadius: "8px",
+    background: "#f0f9ff",
+    color: "#0c4a6e",
+    fontWeight: 500,
+    fontFamily: "Segoe UI, sans-serif",
+    border: "1px solid #bae6fd",
+  },
+  iconTheme: {
+    primary: "#0ea5e9", // blue-500
+    secondary: "#ecfeff", // lighter background
+  },
+});
+
   };
 
   const handleFileChange = (e) => {
@@ -83,7 +94,7 @@ export default function CreateBlogPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white mt-10 shadow-md rounded-xl">
-      <h2 className="text-2xl font-bold mb-6">📝 Create New Blog</h2>
+      <h2 className="text-3xl font-semibold mb-6">📝 Create your Blog</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block mb-1 font-medium">Title</label>

@@ -33,10 +33,10 @@ export default function HomePage() {
       {/* Create Blog Button */}
       <div className="flex justify-end px-4 sm:px-6 md:px-10 mt-6">
         <Link
-          to="/create-blog"
+          to="/createBlog"
           className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-transform duration-300 ease-in-out text-sm sm:text-base"
         >
-          <span className="text-lg font-bold">+</span>
+          <span className="text-lg font-medium">+</span>
           <span>Create Blog</span>
         </Link>
       </div>
