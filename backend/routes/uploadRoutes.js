@@ -2,13 +2,20 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
+
+// Required for ES module support (__dirname workaround)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
+// Absolute path for the uploads folder
+const uploadDir = path.join(__dirname, "..", "uploads");
+
 // Create uploads folder if not exists
-const uploadDir = "uploads";
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // Multer storage configuration
@@ -24,12 +31,11 @@ const storage = multer.diskStorage({
   },
 });
 
-// File type validation (optional)
+// File type validation
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png|pdf/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
-
   if (extname && mimetype) {
     return cb(null, true);
   } else {
@@ -46,11 +52,19 @@ const upload = multer({
 });
 
 // POST route to upload a single file
-router.post("/", upload.single("file"), (req, res) => {
+router.post("/", upload.single("image"), (req, res) => {
+  // Return a path relative to public static access
+  const relativePath = `/uploads/${req.file.filename}`;
   res.status(200).json({
     message: "✅ File uploaded successfully",
-    filePath: `/${req.file.path}`,
+    filePath: relativePath,
   });
 });
 
 export default router;
+
+
+
+
+
+

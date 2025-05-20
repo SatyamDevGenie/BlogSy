@@ -22,7 +22,7 @@ export default function Navbar() {
       </Link>
 
       {/* Nav links & user actions */}
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-10">
         <Link
           to="/about"
           className="text-gray-700 font-medium hover:text-blue-600 transition duration-200"

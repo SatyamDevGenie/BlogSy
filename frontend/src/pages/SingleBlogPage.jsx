@@ -50,7 +50,7 @@ export default function SingleBlogPage() {
           <img
             src={blog.image}
             alt={blog.title}
-            className="w-full h-[400px] sm:h-[475px] object-cover"
+            className="w-full h-[400px] sm:h-[475px] object-fit"
           />
         )}
 
