@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import SingleBlogPage from "./pages/SingleBlogPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
+import EditBlogPage from "./pages/EditBlogPage"; // ✅ Import this
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,6 +38,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <CreateBlogPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-blog/:id"
+            element={
+              <ProtectedRoute>
+                <EditBlogPage />
               </ProtectedRoute>
             }
           />

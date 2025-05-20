@@ -46,6 +46,28 @@ export const createBlog = createAsyncThunk(
   }
 );
 
+// ✏️ Update a Blog
+export const updateBlog = createAsyncThunk(
+  "blog/update",
+  async ({ id, formData }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.put(`${BLOG_API_URL}/${id}`, formData, config);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update blog"
+      );
+    }
+  }
+);
+
 // =======================
 // Blog Slice
 // =======================
@@ -96,6 +118,23 @@ const blogSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+
+      // ✏️ Update Blog
+      .addCase(updateBlog.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateBlog.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.blogs = state.blogs.map((blog) =>
+          blog._id === action.payload._id ? action.payload : blog
+        );
+      })
+      .addCase(updateBlog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
@@ -103,14 +142,3 @@ const blogSlice = createSlice({
 // Export actions & reducer
 export const { resetBlog } = blogSlice.actions;
 export default blogSlice.reducer;
-
-
-
-
-
-
-
-
-
-
-
