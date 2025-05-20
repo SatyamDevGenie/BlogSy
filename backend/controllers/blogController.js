@@ -18,6 +18,7 @@ const createBlog = async (req, res) => {
     const populatedBlog = await createdBlog.populate("author", "_id username");
 
     res.status(201).json(createdBlog);
+    // res.status(201).json(populatedBlog);
   } catch (error) {
     res
       .status(500)

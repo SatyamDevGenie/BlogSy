@@ -4,7 +4,6 @@ import express from "express"; // 🚀 Create Express app
 import chalk from "chalk"; // 🎨 Stylish console logs
 import cors from "cors"; // 🌐 Enable CORS
 import path from "path"; // 📁 For static file handling
-import { fileURLToPath } from "url"; // 📍 For ES module __dirname workaround
 import connectDB from "./config/db.js"; // 🔗 MongoDB connection
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js"; // ❌ Error handlers
 
@@ -24,10 +23,11 @@ const app = express(); // 🖥️ Initialize Express server
 app.use(express.json()); // 📨 Parse JSON request body
 app.use(cors()); // 🔓 Allow cross-origin requests
 
-// 📁 Handle static folder for uploaded files
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // Serve uploaded files
+
+// Correct way to serve static files
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 
 // ✅ API Health Check
 app.get("/", (req, res) => {

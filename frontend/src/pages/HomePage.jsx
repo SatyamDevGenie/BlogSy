@@ -21,11 +21,11 @@ export default function HomePage() {
 
       {/* Header Section */}
       <div className="py-10 px-4 text-black text-center shadow-md bg-white">
-        <h1 className="text-3xl sm:text-3xl font-semibold drop-shadow mb-3 animate-fade-in">
+        <h1 className="text-3xl sm:text-2xl font-semibold drop-shadow mb-3 animate-fade-in">
           Discovering our Latest Inspiring Blogs ✨
         </h1>
-        <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto font-medium">
-          Explore the latest thoughts, stories & ideas from our amazing
+        <p className="text-base sm:text-1xl text-gray-600 max-w-xl mx-auto font-medium">
+          Explore our latest thoughts, stories, ideas and blogs from our amazing
           community of writers.
         </p>
       </div>
@@ -33,7 +33,7 @@ export default function HomePage() {
       {/* Create Blog Button */}
       <div className="flex justify-end px-4 sm:px-6 md:px-10 mt-6">
         <Link
-          to="/createBlog"
+          to="/create-blog"
           className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-transform duration-300 ease-in-out text-sm sm:text-base"
         >
           <span className="text-lg font-bold">+</span>
