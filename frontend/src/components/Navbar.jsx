@@ -17,7 +17,7 @@ export default function Navbar() {
       transition={{ type: "spring", stiffness: 120, damping: 20 }}
     >
       {/* Simple Logo */}
-      <Link to="/" className="text-3xl font-semibold text-black">
+      <Link to="/" className="text-3xl font-bold text-black">
         BlogSy
       </Link>
 

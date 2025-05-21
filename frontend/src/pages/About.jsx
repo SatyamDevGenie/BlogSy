@@ -9,7 +9,7 @@ export default function About() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <h1 className="text-4xl font-extrabold mb-8 text-black tracking-wide">
+      <h1 className="text-4xl font-bold mb-8 text-black tracking-wide">
         About BlogSy
       </h1>
       <motion.p

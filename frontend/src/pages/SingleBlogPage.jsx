@@ -157,7 +157,7 @@ export default function SingleBlogPage() {
             Created on - {new Date(blog.createdAt).toLocaleDateString()}
           </div>
 
-          <p className="text-gray-700 text-lg leading-relaxed font-medium whitespace-pre-line mb-8">
+          <p className="text-gray-700 text-lg leading-8 font-medium text-justify whitespace-pre-line mb-8">
             {blog.content}
           </p>
 

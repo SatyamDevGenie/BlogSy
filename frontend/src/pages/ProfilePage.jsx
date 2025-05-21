@@ -60,6 +60,10 @@ export default function ProfilePage() {
 
   const handleEditProfile = () => navigate("/updateProfile");
 
+  const handleBlogClick = (id) => {
+    navigate(`/blogs/${id}`);
+  };
+
   if (loading) return <p className="p-8 text-center">Loading...</p>;
   if (error) return <p className="p-8 text-center text-red-600">{error}</p>;
   if (!profile) return null;
@@ -146,8 +150,9 @@ export default function ProfilePage() {
             {profile.favourites.map((fav) => (
               <motion.li
                 key={fav._id}
-                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded"
+                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded cursor-pointer"
                 whileHover={{ scale: 1.02 }}
+                onClick={() => handleBlogClick(fav._id)}
               >
                 <strong className="text-slate-800">{fav.title}</strong> by{" "}
                 <span className="text-pink-700">{fav.author.username}</span>
@@ -177,15 +182,19 @@ export default function ProfilePage() {
               return (
                 <motion.li
                   key={blog._id}
-                  className="flex justify-between items-center bg-blue-50 border-l-4 border-blue-500 px-4 py-2 rounded"
+                  className="flex justify-between items-center bg-blue-50 border-l-4 border-blue-500 px-4 py-2 rounded cursor-pointer"
                   whileHover={{ scale: 1.02 }}
+                  onClick={() => handleBlogClick(blog._id)}
                 >
                   <div>
                     <strong className="text-slate-800">{blog.title}</strong>
                   </div>
                   {!isFav && (
                     <motion.button
-                      onClick={() => handleAddToFavourites(blog._id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent navigation
+                        handleAddToFavourites(blog._id);
+                      }}
                       className="flex items-center text-sm text-blue-700"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -205,3 +214,4 @@ export default function ProfilePage() {
     </motion.div>
   );
 }
+
