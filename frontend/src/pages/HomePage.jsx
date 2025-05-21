@@ -52,7 +52,7 @@ export default function HomePage() {
         ) : blogs.length === 0 ? (
           <p className="text-center text-gray-500">No blogs found.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-up">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 animate-fade-up">
             {blogs.map((blog, index) => (
               <div
                 key={blog._id}

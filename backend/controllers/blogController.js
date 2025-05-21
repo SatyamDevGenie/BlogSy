@@ -161,7 +161,6 @@ const likeBlog = async (req, res) => {
 };
 
 // 💬 Comment on Blog
-// 💬 Comment on Blog
 const commentBlog = async (req, res) => {
   const { comment } = req.body;
 

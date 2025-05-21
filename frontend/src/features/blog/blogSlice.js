@@ -68,6 +68,32 @@ export const updateBlog = createAsyncThunk(
   }
 );
 
+// 💬 Comment on Blog
+export const commentOnBlog = createAsyncThunk(
+  "blog/comment",
+  async ({ blogId, comment }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.post(
+        `${BLOG_API_URL}/${id}/comment`,
+        { comment },
+        config
+      );
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to comment on blog"
+      );
+    }
+  }
+);
+
 // =======================
 // Blog Slice
 // =======================
@@ -133,6 +159,17 @@ const blogSlice = createSlice({
       })
       .addCase(updateBlog.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // 💬 Comment on Blog
+      .addCase(commentOnBlog.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.blogs = state.blogs.map((blog) =>
+          blog._id === action.payload._id ? action.payload : blog
+        );
+      })
+      .addCase(commentOnBlog.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       });

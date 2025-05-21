@@ -2,35 +2,47 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
 export default function SingleBlogPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [comment, setComment] = useState("");
+  const [commentError, setCommentError] = useState("");
 
   const user = useSelector((state) => state.auth.user);
   const token = user?.token;
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`, config);
-        setBlog(res.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch blog. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchBlog = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(
+        `http://localhost:5000/api/blogs/${id}`,
+        config
+      );
+      setBlog(res.data);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to fetch blog. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (token) {
       fetchBlog();
     } else {
@@ -55,11 +67,40 @@ export default function SingleBlogPage() {
     }
   };
 
-  if (loading) return <div className="p-6 text-center text-gray-600">Loading blog...</div>;
-  if (error) return <div className="p-6 text-center text-red-600">{error}</div>;
-  if (!blog) return <div className="p-6 text-center text-gray-600">Blog not found.</div>;
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    setCommentError("");
 
-  const isOwner = user && blog.author?._id === user._id;
+    if (!comment.trim()) {
+      return setCommentError("Comment cannot be empty.");
+    }
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+      const res = await axios.post(
+        `http://localhost:5000/api/blogs/${id}/comment`,
+        { comment },
+        config
+      );
+      setBlog(res.data); // refresh with updated blog
+      setComment(""); // clear input
+    } catch (err) {
+      setCommentError(err.response?.data?.message || "Failed to post comment.");
+    }
+  };
+
+  const isOwner = user && blog?.author?._id === user._id;
+
+  if (loading)
+    return <div className="p-6 text-center text-gray-600">Loading blog...</div>;
+  if (error) return <div className="p-6 text-center text-red-600">{error}</div>;
+  if (!blog)
+    return <div className="p-6 text-center text-gray-600">Blog not found.</div>;
 
   return (
     <div className="pb-16">
@@ -69,11 +110,10 @@ export default function SingleBlogPage() {
           <img
             src={blog.image}
             alt={blog.title}
-            className="w-full h-[400px] sm:h-[475px] object-fit"
+            className="w-full h-[400px] sm:h-[475px] object-fill"
           />
         )}
 
-        {/* Back Button */}
         <Link
           to="/"
           className="absolute top-4 left-4 bg-white p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-200"
@@ -82,7 +122,6 @@ export default function SingleBlogPage() {
           <ArrowLeftIcon className="h-6 w-6 text-gray-800" />
         </Link>
 
-        {/* Edit & Delete Buttons for Owner */}
         {isOwner && (
           <div className="absolute top-4 right-4 flex gap-3">
             <Link
@@ -111,15 +150,17 @@ export default function SingleBlogPage() {
           </h1>
 
           <div className="text-sm sm:text-base text-gray-500 mb-4">
-            By <span className="font-semibold">{blog.author?.username || "Unknown"}</span> •{" "}
-            {new Date(blog.createdAt).toLocaleDateString()}
+            {/* By{" "}
+            <span className="font-semibold">
+              {blog.author?.username || "Unknown"}
+            </span>{" "} */}
+            Created on - {new Date(blog.createdAt).toLocaleDateString()}
           </div>
 
           <p className="text-gray-700 text-lg leading-relaxed font-medium whitespace-pre-line mb-8">
             {blog.content}
           </p>
 
-          {/* Stats */}
           <div className="flex flex-wrap gap-6 text-sm text-gray-600 border-t pt-4">
             <span>❤️ {blog.likes?.length || 0} Likes</span>
             <span>👁️ {blog.views || 0} Views</span>
@@ -127,9 +168,35 @@ export default function SingleBlogPage() {
           </div>
         </div>
 
-        {/* Comments */}
+        {/* Comment Section */}
         <div className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Comments</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Comments
+          </h2>
+
+          {user && (
+            <form onSubmit={handleCommentSubmit} className="mb-6">
+              <textarea
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="3"
+                placeholder="Write a comment..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
+              {commentError && (
+                <p className="text-red-500 mt-1">{commentError}</p>
+              )}
+              <button
+                type="submit"
+                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              >
+                Post Comment
+              </button>
+            </form>
+          )}
+
+          {!user && <p className="text-gray-600">Login to post a comment.</p>}
+
           {blog.comments?.length > 0 ? (
             <ul className="space-y-5">
               {blog.comments.map((comment) => (
@@ -137,34 +204,25 @@ export default function SingleBlogPage() {
                   key={comment._id || comment.createdAt}
                   className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-gray-700">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-semibold text-gray-700">
                       {comment.user?.username || "Anonymous"}
                     </span>
                     <span className="text-xs text-gray-400">
                       {new Date(comment.createdAt).toLocaleString()}
                     </span>
                   </div>
-                  <p className="text-gray-600">{comment.comment}</p>
+                  <p className="text-gray-700">{comment.comment}</p>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No comments yet. Be the first to comment!</p>
+            <p className="text-gray-500">
+              No comments yet. Be the first to comment!
+            </p>
           )}
         </div>
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
