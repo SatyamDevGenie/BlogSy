@@ -88,8 +88,15 @@ export default function SingleBlogPage() {
         { comment },
         config
       );
-      setBlog(res.data); // refresh with updated blog
-      setComment(""); // clear input
+      // Ensure that user details are preserved
+      setBlog((prev) => ({
+        ...res.data,
+        author: prev.author, // retain original author
+        comments: res.data.comments.map(
+          (c) => (c.user?._id ? c : { ...c, user: user }) // fill current user
+        ),
+      }));
+      setComment("");
     } catch (err) {
       setCommentError(err.response?.data?.message || "Failed to post comment.");
     }
@@ -109,7 +116,7 @@ export default function SingleBlogPage() {
         {},
         config
       );
-      setBlog(res.data); // updated blog with updated likes
+      setBlog(res.data);
     } catch (err) {
       alert(err.response?.data?.message || "Failed to like blog.");
     } finally {
@@ -174,7 +181,11 @@ export default function SingleBlogPage() {
           </h1>
 
           <div className="text-sm sm:text-base text-gray-500 mb-4">
-            Created on - {new Date(blog.createdAt).toLocaleDateString()}
+            Created By{" "}
+            <span className="font-medium text-gray-700">
+              {blog.author?.username || "Unknown"}
+            </span>{" "}
+            on {new Date(blog.createdAt).toLocaleDateString()}
           </div>
 
           <p className="text-gray-700 text-lg leading-8 font-medium text-justify whitespace-pre-line mb-8">
@@ -242,7 +253,7 @@ export default function SingleBlogPage() {
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold text-gray-700">
-                      {comment.user?.username || "Anonymous"}
+                      {comment.user?.username || user?.username || "Anonymous"}
                     </span>
                     <span className="text-xs text-gray-400">
                       {new Date(comment.createdAt).toLocaleString()}
