@@ -17,6 +17,7 @@ export default function SingleBlogPage() {
   const [error, setError] = useState("");
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState("");
+  const [likeLoading, setLikeLoading] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
   const token = user?.token;
@@ -94,7 +95,30 @@ export default function SingleBlogPage() {
     }
   };
 
+  const handleLikeToggle = async () => {
+    if (!user) return alert("Login to like the blog.");
+    try {
+      setLikeLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.put(
+        `http://localhost:5000/api/blogs/${id}/like`,
+        {},
+        config
+      );
+      setBlog(res.data); // updated blog with updated likes
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to like blog.");
+    } finally {
+      setLikeLoading(false);
+    }
+  };
+
   const isOwner = user && blog?.author?._id === user._id;
+  const isLikedByUser = blog?.likes?.includes(user?._id);
 
   if (loading)
     return <div className="p-6 text-center text-gray-600">Loading blog...</div>;
@@ -150,10 +174,6 @@ export default function SingleBlogPage() {
           </h1>
 
           <div className="text-sm sm:text-base text-gray-500 mb-4">
-            {/* By{" "}
-            <span className="font-semibold">
-              {blog.author?.username || "Unknown"}
-            </span>{" "} */}
             Created on - {new Date(blog.createdAt).toLocaleDateString()}
           </div>
 
@@ -161,8 +181,17 @@ export default function SingleBlogPage() {
             {blog.content}
           </p>
 
-          <div className="flex flex-wrap gap-6 text-sm text-gray-600 border-t pt-4">
-            <span>❤️ {blog.likes?.length || 0} Likes</span>
+          <div className="flex flex-wrap gap-6 text-sm text-gray-600 border-t pt-4 items-center">
+            <button
+              onClick={handleLikeToggle}
+              disabled={likeLoading}
+              className={`flex items-center gap-1 ${
+                isLikedByUser ? "text-red-600 font-bold" : ""
+              }`}
+            >
+              ❤️ {blog.likes?.length || 0}
+              {likeLoading && <span className="ml-1 animate-pulse">...</span>}
+            </button>
             <span>👁️ {blog.views || 0} Views</span>
             <span>💬 {blog.comments?.length || 0} Comments</span>
           </div>

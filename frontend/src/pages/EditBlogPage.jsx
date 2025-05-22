@@ -102,7 +102,8 @@ export default function EditBlogPage() {
     dispatch(updateBlog({ id, formData: updatedData }))
       .unwrap()
       .then(() => {
-        navigate(`/blogs/${id}`);
+        // navigate(`/blogs/${id}`);
+        navigate("/")
       })
       .catch(() => {
         // error handled by isError
