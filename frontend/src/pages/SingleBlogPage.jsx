@@ -185,13 +185,20 @@ export default function SingleBlogPage() {
             <button
               onClick={handleLikeToggle}
               disabled={likeLoading}
-              className={`flex items-center gap-1 ${
-                isLikedByUser ? "text-red-600 font-bold" : ""
-              }`}
+              className={`group flex items-center gap-1 text-lg font-medium transition duration-200 ${
+                isLikedByUser ? "text-red-600" : "text-gray-600"
+              } hover:scale-105 hover:text-red-500 active:scale-95`}
+              title={isLikedByUser ? "Unlike" : "Like"}
             >
-              ❤️ {blog.likes?.length || 0}
+              <span className="transition duration-200 group-hover:scale-125">
+                ❤️
+              </span>
+              <span className="transition duration-200">
+                {blog.likes?.length || 0}
+              </span>
               {likeLoading && <span className="ml-1 animate-pulse">...</span>}
             </button>
+
             <span>👁️ {blog.views || 0} Views</span>
             <span>💬 {blog.comments?.length || 0} Comments</span>
           </div>
