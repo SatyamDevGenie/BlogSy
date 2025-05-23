@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,6 +6,7 @@ import {
   ArrowLeftIcon,
   PencilSquareIcon,
   TrashIcon,
+  HeartIcon,
 } from "@heroicons/react/24/solid";
 
 export default function SingleBlogPage() {
@@ -22,6 +19,7 @@ export default function SingleBlogPage() {
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState("");
   const [likeLoading, setLikeLoading] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
   const token = user?.token;
@@ -29,9 +27,7 @@ export default function SingleBlogPage() {
   const fetchBlog = async () => {
     try {
       const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
         `http://localhost:5000/api/blogs/${id}`,
@@ -39,9 +35,7 @@ export default function SingleBlogPage() {
       );
       setBlog(res.data);
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Failed to fetch blog. Please try again."
-      );
+      setError(err.response?.data?.message || "Failed to fetch blog.");
     } finally {
       setLoading(false);
     }
@@ -60,9 +54,7 @@ export default function SingleBlogPage() {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         };
         await axios.delete(`http://localhost:5000/api/blogs/${id}`, config);
         navigate("/");
@@ -92,13 +84,9 @@ export default function SingleBlogPage() {
         { comment },
         config
       );
-      // Ensure that user details are preserved
       setBlog((prev) => ({
         ...res.data,
-        author: prev.author, // retain original author
-        comments: res.data.comments.map(
-          (c) => (c.user?._id ? c : { ...c, user: user }) // fill current user
-        ),
+        author: prev.author,
       }));
       setComment("");
     } catch (err) {
@@ -111,9 +99,7 @@ export default function SingleBlogPage() {
     try {
       setLikeLoading(true);
       const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.put(
         `http://localhost:5000/api/blogs/${id}/like`,
@@ -128,8 +114,29 @@ export default function SingleBlogPage() {
     }
   };
 
+  const handleFavoriteToggle = async () => {
+    if (!user) return alert("Login to favorite the blog.");
+    try {
+      setFavLoading(true);
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const res = await axios.put(
+        `http://localhost:5000/api/users/favourites/${id}`, // ✅ correct endpoint
+        {},
+        config
+      );
+      alert(res.data.message); // Optional: show toast
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to favorite blog.");
+    } finally {
+      setFavLoading(false);
+    }
+  };
+
   const isOwner = user && blog?.author?._id === user._id;
   const isLikedByUser = blog?.likes?.includes(user?._id);
+  const isFavorited = blog?.favorites?.includes(user?._id);
 
   if (loading)
     return <div className="p-6 text-center text-gray-600">Loading blog...</div>;
@@ -208,9 +215,7 @@ export default function SingleBlogPage() {
               <span className="transition duration-200 group-hover:scale-125">
                 ❤️
               </span>
-              <span className="transition duration-200">
-                {blog.likes?.length || 0}
-              </span>
+              <span>{blog.likes?.length || 0}</span>
               {likeLoading && <span className="ml-1 animate-pulse">...</span>}
             </button>
 
@@ -219,13 +224,28 @@ export default function SingleBlogPage() {
           </div>
         </div>
 
+        {/* Favorite Button */}
+        <div className="mt-6 flex">
+          <button
+            onClick={handleFavoriteToggle}
+            disabled={favLoading}
+            className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-white transition ${
+              isFavorited ? "bg-red-500" : "bg-gray-600"
+            } hover:scale-105 active:scale-95`}
+          >
+            <HeartIcon className="h-5 w-5" />
+            {isFavorited ? "Favorited" : "Add to Favorites"}
+            {favLoading && <span className="animate-pulse ml-2">...</span>}
+          </button>
+        </div>
+
         {/* Comment Section */}
         <div className="mt-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Comments
           </h2>
 
-          {user && (
+          {user ? (
             <form onSubmit={handleCommentSubmit} className="mb-6">
               <textarea
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -244,9 +264,9 @@ export default function SingleBlogPage() {
                 Post Comment
               </button>
             </form>
+          ) : (
+            <p className="text-gray-600">Login to post a comment.</p>
           )}
-
-          {!user && <p className="text-gray-600">Login to post a comment.</p>}
 
           {blog.comments?.length > 0 ? (
             <ul className="space-y-5">
@@ -257,20 +277,20 @@ export default function SingleBlogPage() {
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold text-gray-700">
-                      {comment.user?.username || user?.username || "Anonymous"}
+                      {comment.user?.username || "User"}
                     </span>
                     <span className="text-xs text-gray-400">
                       {new Date(comment.createdAt).toLocaleString()}
                     </span>
                   </div>
-                  <p className="text-gray-700">{comment.comment}</p>
+                  <p className="text-gray-800">
+                    {comment.text || comment.comment}
+                  </p>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">
-              No comments yet. Be the first to comment!
-            </p>
+            <p className="text-gray-600">No comments yet.</p>
           )}
         </div>
       </div>

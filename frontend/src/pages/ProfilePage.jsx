@@ -12,6 +12,7 @@ import {
   UserPlusIcon,
   PencilIcon,
   PlusCircleIcon,
+  Trash2Icon,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -23,6 +24,7 @@ export default function ProfilePage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deletingBlogId, setDeletingBlogId] = useState(null);
 
   const fetchProfile = async () => {
     try {
@@ -58,14 +60,40 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDeleteBlog = async (blogId, e) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this blog?")) return;
+
+    try {
+      setDeletingBlogId(blogId);
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await axios.delete(`/api/blogs/${blogId}`, config);
+      fetchProfile();
+    } catch {
+      alert("Failed to delete blog");
+    } finally {
+      setDeletingBlogId(null);
+    }
+  };
+
   const handleEditProfile = () => navigate("/updateProfile");
 
   const handleBlogClick = (id) => {
     navigate(`/blogs/${id}`);
   };
 
-  if (loading) return <p className="p-8 text-center">Loading...</p>;
-  if (error) return <p className="p-8 text-center text-red-600">{error}</p>;
+  if (loading)
+    return (
+      <p className="p-8 text-center text-gray-600 text-lg font-medium">
+        Loading profile...
+      </p>
+    );
+  if (error)
+    return (
+      <p className="p-8 text-center text-red-600 font-semibold text-lg">
+        {error}
+      </p>
+    );
   if (!profile) return null;
 
   return (
@@ -82,7 +110,7 @@ export default function ProfilePage() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold text-slate-800 mb-1">
+        <h1 className="text-4xl font-bold text-slate-800 mb-1 flex items-center justify-center">
           <UserIcon className="inline w-8 h-8 mr-2 text-blue-500" />
           {profile.username}'s Profile
         </h1>
@@ -171,38 +199,37 @@ export default function ProfilePage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <h2 className="text-2xl font-semibold mb-4 flex items-center">
+        <h2 className="text-2xl font-semibold mb-6 flex items-center">
           <FileTextIcon className="w-5 h-5 mr-2 text-blue-600" />
           My Blogs
         </h2>
         {blogs.length ? (
-          <ul className="space-y-3">
+          <ul className="space-y-6">
             {blogs.map((blog) => {
               const isFav = profile.favourites.some((f) => f._id === blog._id);
               return (
                 <motion.li
                   key={blog._id}
-                  className="flex justify-between items-center bg-blue-50 border-l-4 border-blue-500 px-4 py-2 rounded cursor-pointer"
+                  className="flex flex-col md:flex-row md:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded cursor-pointer"
                   whileHover={{ scale: 1.02 }}
                   onClick={() => handleBlogClick(blog._id)}
                 >
-                  <div>
-                    <strong className="text-slate-800">{blog.title}</strong>
+                  {/* Blog info */}
+                  <div className="flex items-center space-x-4 flex-1">
+                    {blog.image && (
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="w-24 h-16 object-cover rounded"
+                      />
+                    )}
+                    <div>
+                      <strong className="text-slate-800 text-lg">
+                        {blog.title}
+                      </strong>
+                      <p className="text-gray-700 mt-1">{blog.content}</p>
+                    </div>
                   </div>
-                  {!isFav && (
-                    <motion.button
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation
-                        handleAddToFavourites(blog._id);
-                      }}
-                      className="flex items-center text-sm text-blue-700"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <PlusCircleIcon className="w-4 h-4 mr-1" />
-                      Add to Favourites
-                    </motion.button>
-                  )}
                 </motion.li>
               );
             })}
@@ -214,4 +241,3 @@ export default function ProfilePage() {
     </motion.div>
   );
 }
-
