@@ -190,11 +190,45 @@ const commentBlog = async (req, res) => {
   }
 };
 
+const getTrendingBlogs = async (req, res) => {
+  try {
+    // Trending Blogs :- Sort by views descending
+    const trendingByViews = await Blog.find()
+      .populate("author", "_id username")
+      .sort({ views: -1, createdAt: -1 })
+      .limit(10);
+
+    res.json(trendingByViews); // or trendingByViews
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Server error while fetching trending blogs", error });
+  }
+};
+
+// 🆕 Get Latest Blogs (most recently created)
+const getLatestBlogs = async (req, res) => {
+  try {
+    const latestBlogs = await Blog.find()
+      .populate("author", "_id username")
+      .sort({ createdAt: -1 }) // newest first
+      .limit(10); // limit results
+
+    res.json(latestBlogs);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Server error while fetching latest blogs", error });
+  }
+};
+
 export {
   createBlog,
   updateBlog,
   deleteBlog,
   getAllBlogs,
+  getTrendingBlogs,
+  getLatestBlogs,
   getSingleBlog,
   likeBlog,
   commentBlog,

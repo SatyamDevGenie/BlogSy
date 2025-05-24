@@ -7,6 +7,8 @@ import {
   getSingleBlog,
   likeBlog,
   commentBlog,
+  getTrendingBlogs,
+  getLatestBlogs,
 } from "../controllers/blogController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
@@ -23,6 +25,12 @@ router.delete("/:id", protect, deleteBlog);
 
 // 📚 Get all blogs
 router.get("/", getAllBlogs);
+
+// 🔥 Get trending blogs (public)
+router.get("/trending", getTrendingBlogs);
+
+// 🆕 Get latest blogs (public)
+router.get("/latest", getLatestBlogs);
 
 // 🔍 Get a single blog
 router.get("/:id", protect, getSingleBlog);
