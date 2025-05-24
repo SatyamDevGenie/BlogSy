@@ -11,7 +11,6 @@ import {
   UsersIcon,
   UserPlusIcon,
   PencilIcon,
-  PlusCircleIcon,
   Trash2Icon,
 } from "lucide-react";
 
@@ -50,13 +49,13 @@ export default function ProfilePage() {
     fetchProfile();
   }, [token]);
 
-  const handleAddToFavourites = async (blogId) => {
+  const handleRemoveFromFavourites = async (blogId) => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.post(`/api/blogs/${blogId}/favourite`, {}, config);
-      fetchProfile();
-    } catch {
-      alert("Failed to add to favourites");
+      await axios.delete(`/api/users/favourites/${blogId}`, config); // ✅ Matches backend route
+      fetchProfile(); // Refresh profile
+    } catch (err) {
+      alert("Failed to remove from favourites");
     }
   };
 
@@ -174,16 +173,23 @@ export default function ProfilePage() {
           Favourite Blogs
         </h2>
         {profile.favourites.length ? (
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {profile.favourites.map((fav) => (
               <motion.li
                 key={fav._id}
-                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded cursor-pointer"
+                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded cursor-pointer flex justify-between items-center"
                 whileHover={{ scale: 1.02 }}
-                onClick={() => handleBlogClick(fav._id)}
               >
-                <strong className="text-slate-800">{fav.title}</strong> by{" "}
-                <span className="text-pink-700">{fav.author.username}</span>
+                <div onClick={() => handleBlogClick(fav._id)}>
+                  <strong className="text-slate-800">{fav.title}</strong> by{" "}
+                  <span className="text-pink-700">{fav.author.username}</span>
+                </div>
+                <button
+                  className="ml-4 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                  onClick={() => handleRemoveFromFavourites(fav._id)}
+                >
+                  Remove
+                </button>
               </motion.li>
             ))}
           </ul>
@@ -205,34 +211,30 @@ export default function ProfilePage() {
         </h2>
         {blogs.length ? (
           <ul className="space-y-6">
-            {blogs.map((blog) => {
-              const isFav = profile.favourites.some((f) => f._id === blog._id);
-              return (
-                <motion.li
-                  key={blog._id}
-                  className="flex flex-col md:flex-row md:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded cursor-pointer"
-                  whileHover={{ scale: 1.02 }}
-                  onClick={() => handleBlogClick(blog._id)}
-                >
-                  {/* Blog info */}
-                  <div className="flex items-center space-x-4 flex-1">
-                    {blog.image && (
-                      <img
-                        src={blog.image}
-                        alt={blog.title}
-                        className="w-24 h-16 object-cover rounded"
-                      />
-                    )}
-                    <div>
-                      <strong className="text-slate-800 text-lg">
-                        {blog.title}
-                      </strong>
-                      <p className="text-gray-700 mt-1">{blog.content}</p>
-                    </div>
+            {blogs.map((blog) => (
+              <motion.li
+                key={blog._id}
+                className="flex flex-col md:flex-row md:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                onClick={() => handleBlogClick(blog._id)}
+              >
+                <div className="flex items-center space-x-4 flex-1">
+                  {blog.image && (
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="w-24 h-16 object-cover rounded"
+                    />
+                  )}
+                  <div>
+                    <strong className="text-slate-800 text-lg">
+                      {blog.title}
+                    </strong>
+                    <p className="text-gray-700 mt-1">{blog.content}</p>
                   </div>
-                </motion.li>
-              );
-            })}
+                </div>
+              </motion.li>
+            ))}
           </ul>
         ) : (
           <p className="text-gray-500">You haven't written any blogs yet.</p>
