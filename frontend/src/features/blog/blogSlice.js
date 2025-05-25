@@ -95,12 +95,30 @@ export const commentOnBlog = createAsyncThunk(
 );
 
 // =======================
+// 📈 Fetch Trending Blogs
+// =======================
+export const fetchTrendingBlogs = createAsyncThunk(
+  "blog/fetchTrending",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BLOG_API_URL}/trending`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch trending blogs"
+      );
+    }
+  }
+);
+
+// =======================
 // Blog Slice
 // =======================
 const blogSlice = createSlice({
   name: "blog",
   initialState: {
     blogs: [],
+    trendingBlogs: [],
     isLoading: false,
     isError: false,
     isSuccess: false,
@@ -173,6 +191,20 @@ const blogSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      // 📈 Trending Blogs
+      .addCase(fetchTrendingBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchTrendingBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.trendingBlogs = action.payload;
+      })
+      .addCase(fetchTrendingBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
   },
 });
 

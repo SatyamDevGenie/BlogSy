@@ -8,7 +8,8 @@ import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import SingleBlogPage from "./pages/SingleBlogPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
-import EditBlogPage from "./pages/EditBlogPage"; // ✅ Import this
+import EditBlogPage from "./pages/EditBlogPage"; //
+import TrendingPage from "./pages/TrendingPage";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,6 +31,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trending"
+            element={
+              <ProtectedRoute>
+                <TrendingPage />
               </ProtectedRoute>
             }
           />

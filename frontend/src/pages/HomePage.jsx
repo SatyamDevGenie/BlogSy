@@ -18,7 +18,6 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-
       {/* Header Section */}
       <section className="text-center py-16 px-4 shadow-inner">
         <h1 className="text-3xl font-semibold text-gray-900 mb-4 tracking-tight animate-fade-in">
@@ -30,14 +29,28 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Create Blog Button */}
-      <div className="flex justify-end px-4 sm:px-6 md:px-10 mt-8">
+      {/* Create & Trending Blog Buttons */}
+      <div className="flex justify-between items-center px-4 sm:px-6 md:px-10 mt-8">
+        {/* Trending Blogs Button - left corner */}
+        <Link
+          to="/trending"
+          className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg transition-all duration-300 ease-in-out hover:from-purple-600 hover:to-red-600 active:scale-95"
+        >
+          <span className="text-lg group-hover:animate-bounce">🔥</span>
+          <span className="font-medium">Trending Blogs</span>
+          <span className="absolute inset-0 rounded-full ring-2 ring-white opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </Link>
+
+        {/* Create Blog Button - right corner */}
         <Link
           to="/createBlog"
-          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-transform duration-300 ease-in-out text-sm sm:text-base"
+          className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg transition-all duration-300 ease-in-out hover:from-blue-700 hover:to-cyan-600 active:scale-95"
         >
-          <span className="text-lg font-medium">+</span>
-          <span>Create Blog</span>
+          <span className="text-xl font-bold group-hover:rotate-90 transition-transform duration-300">
+            +
+          </span>
+          <span className="font-medium">Create Blog</span>
+          <span className="absolute inset-0 rounded-full ring-2 ring-white opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
         </Link>
       </div>
 
