@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../features/blog/blogSlice";
 import BlogCard from "../components/BlogCard";
 import Navbar from "../components/Navbar";
+import About from "./About";
 import { Link } from "react-router-dom"; // Link for navigation
 
 export default function HomePage() {
@@ -82,6 +83,8 @@ export default function HomePage() {
           </div>
         )}
       </div>
+      {/* About Section Rendered */}
+      <About />
     </>
   );
 }

@@ -94,9 +94,7 @@ export const commentOnBlog = createAsyncThunk(
   }
 );
 
-// =======================
 // 📈 Fetch Trending Blogs
-// =======================
 export const fetchTrendingBlogs = createAsyncThunk(
   "blog/fetchTrending",
   async (_, thunkAPI) => {
@@ -111,6 +109,21 @@ export const fetchTrendingBlogs = createAsyncThunk(
   }
 );
 
+// 🆕 Fetch Latest Blogs
+export const fetchLatestBlogs = createAsyncThunk(
+  "blog/fetchLatest",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BLOG_API_URL}/latest`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch latest blogs"
+      );
+    }
+  }
+);
+
 // =======================
 // Blog Slice
 // =======================
@@ -119,6 +132,7 @@ const blogSlice = createSlice({
   initialState: {
     blogs: [],
     trendingBlogs: [],
+    latestBlogs: [],
     isLoading: false,
     isError: false,
     isSuccess: false,
@@ -201,6 +215,20 @@ const blogSlice = createSlice({
         state.trendingBlogs = action.payload;
       })
       .addCase(fetchTrendingBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // 🆕 Fetch Latest Blogs
+      .addCase(fetchLatestBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchLatestBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.latestBlogs = action.payload;
+      })
+      .addCase(fetchLatestBlogs.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

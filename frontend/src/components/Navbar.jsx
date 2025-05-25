@@ -24,10 +24,10 @@ export default function Navbar() {
       {/* Nav links & user actions */}
       <div className="flex items-center space-x-12">
         <Link
-          to="/about"
+          to="/latest"
           className="text-gray-700 font-medium hover:text-blue-600 transition duration-200 mr-2"
         >
-          About Us
+          Latest Blogs
         </Link>
 
         {user && (
@@ -57,6 +57,7 @@ export default function Navbar() {
               <FaSignOutAlt />
               <span>Logout</span>
             </motion.button>
+
           </>
         )}
       </div>

@@ -10,6 +10,7 @@ import SingleBlogPage from "./pages/SingleBlogPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import EditBlogPage from "./pages/EditBlogPage"; //
 import TrendingPage from "./pages/TrendingPage";
+import LatestBlogPage from "./pages/LatestBlogPage";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,6 +40,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <TrendingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/latest"
+            element={
+              <ProtectedRoute>
+                <LatestBlogPage />
               </ProtectedRoute>
             }
           />
