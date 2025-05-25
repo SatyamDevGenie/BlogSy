@@ -25,7 +25,24 @@ export default function Navbar() {
       <div className="flex items-center space-x-12">
         <Link
           to="/latest"
-          className="text-gray-700 font-medium hover:text-blue-600 transition duration-200 mr-2"
+          className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white bg-gradient-to-r from-gray-500 via-gray-3
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          00 to-gray-900 shadow-lg transition-all duration-300 ease-in-out hover:from-gray-600 hover:to-gray-800 active:scale-95"
         >
           Latest Blogs
         </Link>
@@ -57,7 +74,6 @@ export default function Navbar() {
               <FaSignOutAlt />
               <span>Logout</span>
             </motion.button>
-
           </>
         )}
       </div>

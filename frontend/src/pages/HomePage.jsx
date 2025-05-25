@@ -5,6 +5,7 @@ import BlogCard from "../components/BlogCard";
 import Navbar from "../components/Navbar";
 import About from "./About";
 import { Link } from "react-router-dom"; // Link for navigation
+import Footer from "../components/Footer";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -85,6 +86,8 @@ export default function HomePage() {
       </div>
       {/* About Section Rendered */}
       <About />
+      {/* Footer Section Rendered */}
+      <Footer />
     </>
   );
 }
