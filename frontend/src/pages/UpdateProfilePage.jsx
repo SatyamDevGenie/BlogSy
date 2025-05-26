@@ -67,7 +67,7 @@ export default function UpdateProfilePage() {
 
   return (
     <motion.div
-      className="max-w-xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-lg shadow-xl space-y-6"
+      className="max-w-xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-lg shadow- space-y-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}

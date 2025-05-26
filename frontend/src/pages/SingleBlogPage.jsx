@@ -346,60 +346,59 @@ export default function SingleBlogPage() {
           </button>
         </div>
 
-        {/* Comment Section */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Comments
-          </h2>
+       {/* Comment Section */}
+<div className="mt-12">
+  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Comments</h2>
 
-          {user ? (
-            <form onSubmit={handleCommentSubmit} className="mb-6">
-              <textarea
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows="3"
-                placeholder="Write a comment..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              ></textarea>
-              {commentError && (
-                <p className="text-red-500 mt-1">{commentError}</p>
-              )}
-              <button
-                type="submit"
-                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              >
-                Post Comment
-              </button>
-            </form>
-          ) : (
-            <p className="text-gray-600">Login to post a comment.</p>
-          )}
+  {user ? (
+    <form onSubmit={handleCommentSubmit} className="mb-6">
+      <textarea
+        className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        rows="3"
+        placeholder="Write a comment..."
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        disabled={loading}
+      />
+      {commentError && <p className="text-red-500 mt-1">{commentError}</p>}
+      <button
+        type="submit"
+        className={`mt-2 px-4 py-2 rounded text-white transition ${
+          loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+        }`}
+        disabled={loading}
+      >
+        {loading ? "Posting..." : "Post Comment"}
+      </button>
+    </form>
+  ) : (
+    <p className="text-gray-600">Login to post a comment.</p>
+  )}
 
-          {blog.comments?.length > 0 ? (
-            <ul className="space-y-5">
-              {blog.comments.map((comment) => (
-                <li
-                  key={comment._id || comment.createdAt}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-gray-700">
-                      {comment.user?.username || "User"}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {new Date(comment.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                  <p className="text-gray-800">
-                    {comment.text || comment.comment}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-600">No comments yet.</p>
-          )}
-        </div>
+  {blog.comments?.length > 0 ? (
+    <ul className="space-y-5">
+      {blog.comments.map((comment) => (
+        <li
+          key={comment._id || comment.createdAt}
+          className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
+        >
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-sm font-semibold text-gray-700">
+              {comment.user?.username || "User"}
+            </span>
+            <span className="text-sm text-gray-400 font-bold">
+              {new Date(comment.createdAt).toLocaleString()}
+            </span>
+          </div>
+          <p className="text-gray-800">{comment.text || comment.comment}</p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="text-gray-600">No comments yet.</p>
+  )}
+</div>
+
       </div>
     </div>
   );
