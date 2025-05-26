@@ -7,6 +7,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
   HeartIcon,
+  UserPlusIcon,
+  UserMinusIcon,
 } from "@heroicons/react/24/solid";
 
 export default function SingleBlogPage() {
@@ -20,6 +22,8 @@ export default function SingleBlogPage() {
   const [commentError, setCommentError] = useState("");
   const [likeLoading, setLikeLoading] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
   const token = user?.token;
@@ -34,10 +38,30 @@ export default function SingleBlogPage() {
         config
       );
       setBlog(res.data);
+
+      // Check follow status if user is logged in and not the author
+      if (token && res.data.author?._id !== user?._id) {
+        checkFollowStatus(res.data.author._id);
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch blog.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkFollowStatus = async (authorId) => {
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const res = await axios.get(
+        `http://localhost:5000/api/users/${authorId}/follow-status`,
+        config
+      );
+      setIsFollowing(res.data.isFollowing);
+    } catch (err) {
+      console.error("Error checking follow status:", err);
     }
   };
 
@@ -122,15 +146,39 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.put(
-        `http://localhost:5000/api/users/favourites/${id}`, // ✅ correct endpoint
+        `http://localhost:5000/api/users/favourites/${id}`,
         {},
         config
       );
-      alert(res.data.message); // Optional: show toast
+      alert(res.data.message);
     } catch (err) {
       alert(err.response?.data?.message || "Failed to favorite blog.");
     } finally {
       setFavLoading(false);
+    }
+  };
+
+  const handleFollowToggle = async () => {
+    if (!user) return alert("Please login to follow users");
+
+    try {
+      setFollowLoading(true);
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      const endpoint = isFollowing ? "unfollow" : "follow";
+      await axios.put(
+        `http://localhost:5000/api/users/${endpoint}/${blog.author._id}`,
+        {},
+        config
+      );
+
+      setIsFollowing(!isFollowing);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update follow status");
+    } finally {
+      setFollowLoading(false);
     }
   };
 
@@ -187,16 +235,75 @@ export default function SingleBlogPage() {
       {/* Blog Content */}
       <div className="max-w-4xl mx-auto px-6 sm:px-8 mt-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
-          <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800 mb-4 leading-tight">
-            {blog.title}
-          </h1>
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800 mb-2 leading-tight">
+                {blog.title}
+              </h1>
+              <div className="text-sm sm:text-base text-gray-500">
+                Created By{" "}
+                <Link
+                  to={`/profile/${blog.author?._id}`}
+                  className="font-medium text-gray-700 hover:text-blue-600"
+                >
+                  {blog.author?.username || "Unknown"}
+                </Link>{" "}
+                on {new Date(blog.createdAt).toLocaleDateString()}
+              </div>
+            </div>
 
-          <div className="text-sm sm:text-base text-gray-500 mb-4">
-            Created By{" "}
-            <span className="font-medium text-gray-700">
-              {blog.author?.username || "Unknown"}
-            </span>{" "}
-            on {new Date(blog.createdAt).toLocaleDateString()}
+            {/* Follow Button - Only show if not owner and user is logged in */}
+            {user && !isOwner && blog.author && (
+              <button
+                onClick={handleFollowToggle}
+                disabled={followLoading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isFollowing
+                    ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                } ${followLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              >
+                {followLoading ? (
+                  <span className="inline-flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    {isFollowing ? "Unfollowing" : "Following"}
+                  </span>
+                ) : (
+                  <>
+                    {isFollowing ? (
+                      <>
+                        <UserMinusIcon className="h-4 w-4" />
+                        Following
+                      </>
+                    ) : (
+                      <>
+                        <UserPlusIcon className="h-4 w-4" />
+                        Follow
+                      </>
+                    )}
+                  </>
+                )}
+              </button>
+            )}
           </div>
 
           <p className="text-gray-700 text-lg leading-8 font-medium text-justify whitespace-pre-line mb-8">

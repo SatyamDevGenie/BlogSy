@@ -79,6 +79,27 @@ const unfollowUser = async (req, res) => {
   }
 };
 
+// 👤 Check follow status
+const checkFollowStatus = async (req, res) => {
+  try {
+    const targetUser = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (!targetUser || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isFollowing = targetUser.followers.includes(currentUser._id);
+    res.json({ isFollowing });
+  } catch (error) {
+    console.error("Follow status check error:", error);
+    res.status(500).json({
+      message: "Server error while checking follow status",
+      error: error.message,
+    });
+  }
+};
+
 // ⭐ Add blog to favourites
 const addFavourite = async (req, res) => {
   try {
@@ -160,7 +181,6 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-
 // Update User Profile
 const updateUserProfile = async (req, res) => {
   try {
@@ -203,6 +223,7 @@ const updateUserProfile = async (req, res) => {
 export {
   followUser,
   unfollowUser,
+  checkFollowStatus,
   addFavourite,
   removeFavourite,
   getUserProfile,
