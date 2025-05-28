@@ -115,58 +115,58 @@ export default function EditBlogPage() {
 
   return (
     <div className="max-w-3xl w-full mx-auto px-4 sm:px-6 py-10">
-      <h1 className="text-3xl sm:text-4xl font-semibold text-center mb-8 text-slate-800">
+      <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-slate-800">
         ✍️ Edit Blog
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-md p-6 sm:p-10 space-y-6 border border-gray-200"
+        className="bg-white rounded-xl shadow-lg p-4 sm:p-6 space-y-6 border border-gray-200"
       >
         {/* Title Input */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter blog title"
           />
         </div>
 
         {/* Content Textarea */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Content</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
           <textarea
             name="content"
             value={formData.content}
             onChange={handleChange}
             rows={6}
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder="Write your blog content..."
           ></textarea>
         </div>
 
         {/* Image Upload */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Upload New Image (optional)
           </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full text-gray-600 text-sm"
+            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border file:rounded-md file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {imagePreview && (
             <img
               src={imagePreview}
               alt="Preview"
-              className="mt-4 w-full h-56 sm:h-64 object-cover rounded-md border"
+              className="mt-4 w-full h-52 sm:h-64 object-cover rounded-md border"
             />
           )}
         </div>
@@ -180,7 +180,7 @@ export default function EditBlogPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className=" bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-md text-base transition duration-200 disabled:opacity-50"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 disabled:opacity-50"
         >
           {isLoading ? "Updating..." : "Update Blog"}
         </button>
@@ -188,6 +188,7 @@ export default function EditBlogPage() {
     </div>
   );
 }
+
 
 
 

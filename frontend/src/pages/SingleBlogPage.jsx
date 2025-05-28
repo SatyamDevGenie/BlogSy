@@ -200,48 +200,51 @@ export default function SingleBlogPage() {
           <img
             src={blog.image}
             alt={blog.title}
-            className="w-full h-[400px] sm:h-[475px] object-fill"
+            className="w-full h-56 sm:h-72 md:h-[400px] lg:h-[475px] object-fit  transition-all duration-300"
           />
         )}
 
+        {/* Back Button */}
         <Link
           to="/"
-          className="absolute top-4 left-4 bg-white p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-200"
+          className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white p-2 sm:p-2.5 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-200"
           title="Go back"
         >
-          <ArrowLeftIcon className="h-6 w-6 text-gray-800" />
+          <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
         </Link>
 
+        {/* Edit/Delete Buttons for Owner */}
         {isOwner && (
-          <div className="absolute top-4 right-4 flex gap-3">
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2 sm:gap-3">
             <Link
               to={`/edit-blog/${blog._id}`}
-              className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              className="bg-white p-2 sm:p-2.5 rounded-full shadow-md hover:bg-gray-100"
               title="Edit Blog"
             >
-              <PencilSquareIcon className="h-6 w-6 text-blue-600" />
+              <PencilSquareIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
             </Link>
             <button
               onClick={handleDelete}
-              className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              className="bg-white p-2 sm:p-2.5 rounded-full shadow-md hover:bg-gray-100"
               title="Delete Blog"
             >
-              <TrashIcon className="h-6 w-6 text-red-600" />
+              <TrashIcon className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
             </button>
           </div>
         )}
       </div>
 
       {/* Blog Content */}
-      <div className="max-w-4xl mx-auto px-6 sm:px-8 mt-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800 mb-2 leading-tight">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8">
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-10">
+          {/* Blog Title and Follow */}
+          <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-4">
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-800 mb-1 sm:mb-2 leading-snug">
                 {blog.title}
               </h1>
-              <div className="text-sm sm:text-base text-gray-500">
-                Created By{" "}
+              <div className="text-xs sm:text-sm text-gray-500">
+                Created by{" "}
                 <Link
                   to={`/profile/${blog.author?._id}`}
                   className="font-medium text-gray-700 hover:text-blue-600"
@@ -257,7 +260,7 @@ export default function SingleBlogPage() {
               <button
                 onClick={handleFollowToggle}
                 disabled={followLoading}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`w-fit sm:w-auto self-start flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isFollowing
                     ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
                     : "bg-blue-600 text-white hover:bg-blue-700"
@@ -306,15 +309,17 @@ export default function SingleBlogPage() {
             )}
           </div>
 
-          <p className="text-gray-700 text-lg leading-8 font-medium text-justify whitespace-pre-line mb-8">
+          {/* Blog Content */}
+          <p className="text-gray-700 text-base sm:text-lg leading-relaxed font-medium text-justify whitespace-pre-line mb-6 sm:mb-8">
             {blog.content}
           </p>
 
-          <div className="flex flex-wrap gap-6 text-sm text-gray-600 border-t pt-4 items-center">
+          {/* Stats Buttons */}
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600 border-t pt-4 items-center justify-start">
             <button
               onClick={handleLikeToggle}
               disabled={likeLoading}
-              className={`group flex items-center gap-1 text-lg font-medium transition duration-200 ${
+              className={`group flex items-center gap-1 text-base font-medium transition duration-200 ${
                 isLikedByUser ? "text-red-600" : "text-gray-600"
               } hover:scale-105 hover:text-red-500 active:scale-95`}
               title={isLikedByUser ? "Unlike" : "Like"}
@@ -326,17 +331,21 @@ export default function SingleBlogPage() {
               {likeLoading && <span className="ml-1 animate-pulse">...</span>}
             </button>
 
-            <span>👁️ {blog.views || 0} Views</span>
-            <span>💬 {blog.comments?.length || 0} Comments</span>
+            <span className="text-sm sm:text-base">
+              👁️ {blog.views || 0} Views
+            </span>
+            <span className="text-sm sm:text-base">
+              💬 {blog.comments?.length || 0} Comments
+            </span>
           </div>
         </div>
 
         {/* Favorite Button */}
-        <div className="mt-6 flex">
+        <div className="mt-5 sm:mt-6 flex">
           <button
             onClick={handleFavoriteToggle}
             disabled={favLoading}
-            className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-white transition ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition ${
               isFavorited ? "bg-red-500" : "bg-gray-600"
             } hover:scale-105 active:scale-95`}
           >
@@ -346,59 +355,83 @@ export default function SingleBlogPage() {
           </button>
         </div>
 
-       {/* Comment Section */}
-<div className="mt-12">
-  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Comments</h2>
+        {/* Comment Section */}
+        <div className="mt-12 px-4 sm:px-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
+            💬 Comments
+          </h2>
 
-  {user ? (
-    <form onSubmit={handleCommentSubmit} className="mb-6">
-      <textarea
-        className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        rows="3"
-        placeholder="Write a comment..."
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        disabled={loading}
-      />
-      {commentError && <p className="text-red-500 mt-1">{commentError}</p>}
-      <button
-        type="submit"
-        className={`mt-2 px-4 py-2 rounded text-white transition ${
-          loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-        }`}
-        disabled={loading}
-      >
-        {loading ? "Posting..." : "Post Comment"}
-      </button>
-    </form>
-  ) : (
-    <p className="text-gray-600">Login to post a comment.</p>
-  )}
+          {user ? (
+            <form
+              onSubmit={handleCommentSubmit}
+              className="mb-8 bg-white border border-gray-200 rounded-xl p-4 sm:p-6 shadow-lg space-y-4"
+            >
+              <textarea
+                className="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-sm"
+                rows="3"
+                placeholder="Write your comment here..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                disabled={loading}
+              />
+              {commentError && (
+                <p className="text-red-500 text-sm">{commentError}</p>
+              )}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className={`px-5 py-2 rounded-full text-sm sm:text-base text-white transition shadow-md ${
+                    loading
+                      ? "bg-blue-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}
+                  disabled={loading}
+                >
+                  {loading ? "Posting..." : "Post Comment"}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <p className="text-gray-600 text-sm sm:text-base mb-6">
+              <span className="italic">Login to post a comment.</span>
+            </p>
+          )}
 
-  {blog.comments?.length > 0 ? (
-    <ul className="space-y-5">
-      {blog.comments.map((comment) => (
-        <li
-          key={comment._id || comment.createdAt}
-          className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
-        >
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-sm font-semibold text-gray-700">
-              {comment.user?.username || "User"}
-            </span>
-            <span className="text-sm text-gray-400 font-bold">
-              {new Date(comment.createdAt).toLocaleString()}
-            </span>
-          </div>
-          <p className="text-gray-800">{comment.text || comment.comment}</p>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p className="text-gray-600">No comments yet.</p>
-  )}
-</div>
-
+          {blog.comments?.length > 0 ? (
+            <ul className="space-y-6">
+              {blog.comments.map((comment) => (
+                <li
+                  key={comment._id || comment.createdAt}
+                  className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 shadow-md transition hover:shadow-lg"
+                >
+                  <div className="flex items-start gap-3 sm:gap-4 mb-2">
+                    {/* Avatar Circle with Initial */}
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 font-bold text-sm sm:text-base">
+                      {comment.user?.username?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <span className="font-semibold text-gray-800 text-sm sm:text-base">
+                          {comment.user?.username || "User"}
+                        </span>
+                        <span className="text-xs sm:text-sm text-gray-500">
+                          {new Date(comment.createdAt).toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-gray-700 text-sm sm:text-base whitespace-pre-line">
+                        {comment.text || comment.comment}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-600 text-sm sm:text-base">
+              No comments yet.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

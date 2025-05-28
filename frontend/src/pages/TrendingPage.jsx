@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import BlogCard from "../components/BlogCard";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function TrendingPage() {
   const [trendingBlogs, setTrendingBlogs] = useState([]);
@@ -28,17 +29,17 @@ export default function TrendingPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="text-center py-16 px-4 shadow-inner">
-        <h1 className="text-3xl font-semibold text-gray-900 mb-4 tracking-tight animate-fade-in">
+      <section className="text-center py-12 px-4 sm:py-16 sm:px-6 lg:px-8 mt-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight animate-fade-in">
           🔥 Trending Blogs
         </h1>
-        <p className="text-md text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in delay-150">
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in delay-150">
           Explore the most viewed blogs curated by our community.
         </p>
       </section>
 
       {/* Blog Grid */}
-      <div className="px-4 py-10 min-h-[60vh]">
+      <div className="px-4 sm:px-6 lg:px-8 py-10 min-h-[60vh]">
         {loading ? (
           <p className="text-center text-gray-500 animate-pulse">
             Loading trending blogs...
@@ -48,7 +49,7 @@ export default function TrendingPage() {
         ) : trendingBlogs.length === 0 ? (
           <p className="text-center text-gray-500">No trending blogs found.</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 animate-fade-in">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
             {trendingBlogs.map((blog, index) => (
               <div
                 key={blog._id}
@@ -57,7 +58,7 @@ export default function TrendingPage() {
                   animation: `fadeInUp 0.5s ease ${index * 100}ms both`,
                 }}
               >
-                <div className="scale-90">
+                <div className="scale-95 sm:scale-100">
                   <BlogCard blog={blog} />
                 </div>
               </div>
@@ -65,6 +66,7 @@ export default function TrendingPage() {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 }

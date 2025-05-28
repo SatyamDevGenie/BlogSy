@@ -22,9 +22,9 @@ export default function HomePage() {
       <Navbar />
 
       {/* Header Section */}
-      <section className="text-center py-8 px-4 sm:py-10 md:py-16 shadow-inner">
-        <h1 className="text-lg sm:text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight animate-fade-in">
-          “Fueling ideas, connecting minds, one blog at a time.” ✨
+      <section className="text-center py-8 px-4 sm:py-10 md:py-16 shadow-inner mt-10">
+        <h1 className="text-md sm:text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight animate-fade-in mt-8">
+          “Fueling ideas, connecting minds, exploring thoughts one blog at a time.” ✨
         </h1>
         <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed animate-fade-in delay-150">
           Dive into fresh perspectives, valuable insights, and creative voices

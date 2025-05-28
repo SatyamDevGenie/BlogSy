@@ -97,7 +97,7 @@ export default function ProfilePage() {
 
   return (
     <motion.div
-      className="max-w-5xl mx-auto p-6 mt-12 bg-gradient-to-tr from-white via-slate-100 to-white rounded-xl shadow-xl space-y-10"
+      className="max-w-5xl mx-auto px-4 sm:px-6 py-6 mt-8 sm:mt-12 bg-gradient-to-tr from-white via-slate-100 to-white rounded-xl shadow-xl space-y-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -109,14 +109,14 @@ export default function ProfilePage() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold text-slate-800 mb-1 flex items-center justify-center">
-          <UserIcon className="inline w-8 h-8 mr-2 text-blue-500" />
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-1 flex flex-wrap items-center justify-center text-center">
+          <UserIcon className="inline w-7 h-7 sm:w-8 sm:h-8 mr-2 text-blue-500" />
           {profile.username}'s Profile
         </h1>
         <p className="text-sm text-gray-500">Welcome back to your dashboard</p>
         <motion.button
           onClick={handleEditProfile}
-          className="absolute right-0 top-0 mt-2 mr-2 flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+          className="absolute right-2 top-2 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 flex items-center"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -127,19 +127,17 @@ export default function ProfilePage() {
 
       {/* Basic Info */}
       <motion.section
-        className="bg-white rounded-lg shadow p-6"
+        className="bg-white rounded-lg shadow p-4 sm:p-6"
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h2 className="text-2xl font-semibold mb-4 flex items-center">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
           <MailIcon className="w-5 h-5 mr-2 text-gray-500" />
           Basic Info
         </h2>
-        <div className="space-y-3 text-gray-700">
-          <p>
-            <strong>Email:</strong> {profile.email}
-          </p>
+        <div className="space-y-2 text-gray-700 text-sm sm:text-base">
+          <p><strong>Email:</strong> {profile.email}</p>
           <p>
             <strong>
               <UsersIcon className="inline w-4 h-4 mr-1 text-green-600" />
@@ -163,12 +161,12 @@ export default function ProfilePage() {
 
       {/* Favourites */}
       <motion.section
-        className="bg-white rounded-lg shadow p-6"
+        className="bg-white rounded-lg shadow p-4 sm:p-6"
         initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        <h2 className="text-2xl font-semibold mb-4 flex items-center">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
           <HeartIcon className="w-5 h-5 mr-2 text-pink-600" />
           Favourite Blogs
         </h2>
@@ -177,15 +175,15 @@ export default function ProfilePage() {
             {profile.favourites.map((fav) => (
               <motion.li
                 key={fav._id}
-                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded cursor-pointer flex justify-between items-center"
+                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
               >
-                <div onClick={() => handleBlogClick(fav._id)}>
-                  <strong className="text-slate-800">{fav.title}</strong> by{" "}
-                  <span className="text-pink-700">{fav.author.username}</span>
+                <div onClick={() => handleBlogClick(fav._id)} className="w-full">
+                  <strong className="text-slate-800 block truncate">{fav.title}</strong>
+                  <span className="text-pink-700 text-sm">by {fav.author.username}</span>
                 </div>
                 <button
-                  className="ml-4 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                  className="px-3 py-1 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600"
                   onClick={() => handleRemoveFromFavourites(fav._id)}
                 >
                   Remove
@@ -200,12 +198,12 @@ export default function ProfilePage() {
 
       {/* My Blogs */}
       <motion.section
-        className="bg-white rounded-lg shadow p-6"
+        className="bg-white rounded-lg shadow p-4 sm:p-6"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <h2 className="text-2xl font-semibold mb-6 flex items-center">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-6 flex items-center">
           <FileTextIcon className="w-5 h-5 mr-2 text-blue-600" />
           My Blogs
         </h2>
@@ -214,23 +212,21 @@ export default function ProfilePage() {
             {blogs.map((blog) => (
               <motion.li
                 key={blog._id}
-                className="flex flex-col md:flex-row md:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded cursor-pointer"
+                className="flex flex-col sm:flex-row sm:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded gap-4 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
                 onClick={() => handleBlogClick(blog._id)}
               >
-                <div className="flex items-center space-x-4 flex-1">
+                <div className="flex items-start sm:items-center gap-4 w-full">
                   {blog.image && (
                     <img
                       src={blog.image}
                       alt={blog.title}
-                      className="w-24 h-16 object-cover rounded"
+                      className="w-full sm:w-28 h-20 object-cover rounded"
                     />
                   )}
-                  <div>
-                    <strong className="text-slate-800 text-lg">
-                      {blog.title}
-                    </strong>
-                    <p className="text-gray-700 mt-1">{blog.content}</p>
+                  <div className="flex flex-col overflow-hidden">
+                    <strong className="text-slate-800 text-lg truncate">{blog.title}</strong>
+                    <p className="text-gray-700 text-sm mt-1 line-clamp-2">{blog.content}</p>
                   </div>
                 </div>
               </motion.li>
@@ -243,3 +239,4 @@ export default function ProfilePage() {
     </motion.div>
   );
 }
+
