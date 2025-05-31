@@ -104,86 +104,117 @@ export default function ProfilePage() {
     >
       {/* Header */}
       <motion.div
-        className="text-center relative"
+        className="relative text-center px-4 sm:px-0 max-w-screen-lg mx-auto"
         initial={{ y: -20 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-1 flex flex-wrap items-center justify-center text-center">
-          <UserIcon className="inline w-7 h-7 sm:w-8 sm:h-8 mr-2 text-blue-500" />
-          {profile.username}'s Profile
-        </h1>
-        <p className="text-sm text-gray-500">Welcome back to your dashboard</p>
-        <motion.button
-          onClick={handleEditProfile}
-          className="absolute right-2 top-2 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 flex items-center"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <PencilIcon className="w-4 h-4 mr-1" />
-          Edit Profile
-        </motion.button>
+        {/* Title Section */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 mb-2">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-800 flex items-center justify-center">
+            <UserIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 mr-2" />
+            <span className="truncate">{profile.username}'s Profile</span>
+          </h1>
+
+          {/* Edit Button - shown on right for sm and up, stacked on mobile */}
+          <motion.button
+            onClick={handleEditProfile}
+            className="sm:absolute sm:right-4 sm:top-2 mt-2 sm:mt-0 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 flex items-center justify-center"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <PencilIcon className="w-4 h-4 mr-1" />
+            <span className="hidden sm:inline">Edit Profile</span>
+            <span className="sm:hidden">Edit</span>
+          </motion.button>
+        </div>
+
+        {/* Subheading */}
+        <p className="text-sm sm:text-base text-gray-500 leading-relaxed">
+          Welcome back to your dashboard
+        </p>
       </motion.div>
 
       {/* Basic Info */}
       <motion.section
-        className="bg-white rounded-lg shadow p-4 sm:p-6"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6 max-w-screen-md mx-auto w-full"
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
-          <MailIcon className="w-5 h-5 mr-2 text-gray-500" />
+        <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-slate-800">
+          <MailIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-gray-500" />
           Basic Info
         </h2>
-        <div className="space-y-2 text-gray-700 text-sm sm:text-base">
-          <p><strong>Email:</strong> {profile.email}</p>
-          <p>
-            <strong>
+
+        <div className="space-y-3 text-gray-700 text-sm sm:text-base break-words">
+          {/* Email */}
+          <p className="flex flex-wrap">
+            <strong className="mr-1">Email:</strong>
+            <span className="truncate">{profile.email}</span>
+          </p>
+
+          {/* Followers */}
+          <p className="flex flex-wrap items-center">
+            <strong className="mr-1 flex items-center">
               <UsersIcon className="inline w-4 h-4 mr-1 text-green-600" />
               Followers:
-            </strong>{" "}
-            {profile.followers.length
-              ? profile.followers.map((f) => f.username).join(", ")
-              : "No followers"}
+            </strong>
+            <span className="break-words">
+              {profile.followers.length
+                ? profile.followers.map((f) => f.username).join(", ")
+                : "No followers"}
+            </span>
           </p>
-          <p>
-            <strong>
+
+          {/* Following */}
+          <p className="flex flex-wrap items-center">
+            <strong className="mr-1 flex items-center">
               <UserPlusIcon className="inline w-4 h-4 mr-1 text-indigo-600" />
               Following:
-            </strong>{" "}
-            {profile.following.length
-              ? profile.following.map((f) => f.username).join(", ")
-              : "None"}
+            </strong>
+            <span className="break-words">
+              {profile.following.length
+                ? profile.following.map((f) => f.username).join(", ")
+                : "None"}
+            </span>
           </p>
         </div>
       </motion.section>
 
       {/* Favourites */}
       <motion.section
-        className="bg-white rounded-lg shadow p-4 sm:p-6"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6 max-w-screen-md mx-auto w-full"
         initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
-          <HeartIcon className="w-5 h-5 mr-2 text-pink-600" />
+        <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-pink-700">
+          <HeartIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
           Favourite Blogs
         </h2>
+
         {profile.favourites.length ? (
           <ul className="space-y-4">
             {profile.favourites.map((fav) => (
               <motion.li
                 key={fav._id}
-                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-2 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 cursor-pointer"
+                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-3 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
               >
-                <div onClick={() => handleBlogClick(fav._id)} className="w-full">
-                  <strong className="text-slate-800 block truncate">{fav.title}</strong>
-                  <span className="text-pink-700 text-sm">by {fav.author.username}</span>
+                <div
+                  onClick={() => handleBlogClick(fav._id)}
+                  className="w-full sm:max-w-[70%]"
+                >
+                  <strong className="text-slate-800 block truncate text-base sm:text-lg">
+                    {fav.title}
+                  </strong>
+                  <span className="text-pink-700 text-xs sm:text-sm block mt-1 sm:mt-0">
+                    by {fav.author.username}
+                  </span>
                 </div>
                 <button
-                  className="px-3 py-1 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                  className="px-3 py-1 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 self-start sm:self-auto"
                   onClick={() => handleRemoveFromFavourites(fav._id)}
                 >
                   Remove
@@ -192,21 +223,24 @@ export default function ProfilePage() {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No favourites yet.</p>
+          <p className="text-gray-500 text-sm sm:text-base">
+            No favourites yet.
+          </p>
         )}
       </motion.section>
 
       {/* My Blogs */}
       <motion.section
-        className="bg-white rounded-lg shadow p-4 sm:p-6"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6 max-w-screen-md mx-auto w-full"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <h2 className="text-xl sm:text-2xl font-semibold mb-6 flex items-center">
-          <FileTextIcon className="w-5 h-5 mr-2 text-blue-600" />
+        <h2 className="text-lg sm:text-2xl font-semibold mb-6 flex items-center text-blue-700">
+          <FileTextIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
           My Blogs
         </h2>
+
         {blogs.length ? (
           <ul className="space-y-6">
             {blogs.map((blog) => (
@@ -216,27 +250,32 @@ export default function ProfilePage() {
                 whileHover={{ scale: 1.02 }}
                 onClick={() => handleBlogClick(blog._id)}
               >
-                <div className="flex items-start sm:items-center gap-4 w-full">
-                  {blog.image && (
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full sm:w-28 h-20 object-cover rounded"
-                    />
-                  )}
-                  <div className="flex flex-col overflow-hidden">
-                    <strong className="text-slate-800 text-lg truncate">{blog.title}</strong>
-                    <p className="text-gray-700 text-sm mt-1 line-clamp-2">{blog.content}</p>
-                  </div>
+                {/* Image first on mobile, then content below */}
+                {blog.image && (
+                  <img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-40 object-cover rounded mb-3 sm:mb-0 sm:mr-4 sm:w-28 sm:h-20"
+                  />
+                )}
+
+                <div className="flex flex-col overflow-hidden">
+                  <strong className="text-slate-800 text-base sm:text-lg truncate">
+                    {blog.title}
+                  </strong>
+                  <p className="text-gray-700 text-xs sm:text-sm mt-1 line-clamp-2">
+                    {blog.content}
+                  </p>
                 </div>
               </motion.li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">You haven't written any blogs yet.</p>
+          <p className="text-gray-500 text-sm sm:text-base">
+            You haven't written any blogs yet.
+          </p>
         )}
       </motion.section>
     </motion.div>
   );
 }
-
