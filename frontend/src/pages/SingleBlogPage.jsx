@@ -113,6 +113,8 @@ export default function SingleBlogPage() {
         author: prev.author,
       }));
       setComment("");
+      // Reload the page after successful comment
+      window.location.reload();
     } catch (err) {
       setCommentError(err.response?.data?.message || "Failed to post comment.");
     }
@@ -131,6 +133,8 @@ export default function SingleBlogPage() {
         config
       );
       setBlog(res.data);
+      // Reload the page after successful comment
+      window.location.reload();
     } catch (err) {
       alert(err.response?.data?.message || "Failed to like blog.");
     } finally {
@@ -151,6 +155,8 @@ export default function SingleBlogPage() {
         config
       );
       alert(res.data.message);
+      // Reload the page after successful comment
+      window.location.reload();
     } catch (err) {
       alert(err.response?.data?.message || "Failed to favorite blog.");
     } finally {
@@ -175,6 +181,8 @@ export default function SingleBlogPage() {
       );
 
       setIsFollowing(!isFollowing);
+      // Reload the page after successful comment
+      window.location.reload();
     } catch (err) {
       alert(err.response?.data?.message || "Failed to update follow status");
     } finally {
