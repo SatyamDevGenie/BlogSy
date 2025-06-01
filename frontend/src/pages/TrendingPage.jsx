@@ -30,7 +30,7 @@ export default function TrendingPage() {
 
       {/* Header */}
       <section className="text-center py-12 px-4 sm:py-16 sm:px-6 lg:px-8 mt-12">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight animate-fade-in">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight animate-fade-in mt-6">
           🔥 Trending Blogs
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in delay-150">

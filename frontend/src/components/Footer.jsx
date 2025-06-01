@@ -1,20 +1,20 @@
 export default function Footer() {
   return (
-    <footer className="bg-black text-white border-t border-gray-700">
+    <footer className="bg-black text-white border-t border-gray-700 mt-3">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
         {/* Brand Info */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-semibold text-white mb-2">
             BlogSy Platform
           </h2>
           <p className="text-gray-400 text-sm">
-            A place to share knowledge, ideas, and stories with the world.
+            A place to share knowledge, ideas, stories
           </p>
           <p className="text-xs text-gray-500 mt-3">
             Built with ❤️ by{" "}
             <a
               href="https://www.linkedin.com/in/satyam-sawant-a257802a7/"
-              className="text-blue-400 hover:underline"
+              className="text-blue-400 hover:underline font-bold"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -25,7 +25,7 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+          <h3 className="text-2xl font-semibold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>
               <a href="/" className="hover:text-blue-400">
@@ -47,7 +47,7 @@ export default function Footer() {
 
         {/* Contact Info */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Contact</h3>
+          <h3 className="text-2xl font-semibold mb-3">Contact</h3>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>
               📧{" "}
@@ -69,7 +69,7 @@ export default function Footer() {
 
         {/* Social Media (optional) */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">
+          <h3 className="text-md font-semibold mb-3">
             Share your thoughts and Blogs
           </h3>
           <div className="flex space-x-4 text-gray-400 text-xl">
@@ -95,7 +95,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-600 py-4 text-center font-bold text-sm text-gray-500">
+      <div className="border-t border-gray-900 py-4 text-center font-medium text-md text-white">
         BlogSy {new Date().getFullYear()} Satyam Software Solutions
       </div>
     </footer>

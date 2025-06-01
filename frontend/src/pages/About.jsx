@@ -16,10 +16,10 @@ export default function About() {
       </h1>
 
       {/* Subheading */}
-      <p className="mt-6 text-sm sm:text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+      <p className="mt-6 px-4 sm:px-6 md:px-8 text-center sm:text-left text-sm sm:text-base md:text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
         Discovering the stories, experiences, and ideas shared by our community.
-        Whether you're here to read, write, or be inspired — BlogSy 2025 is your
-        space to shine.
+        Whether you're here to read, write, or be inspired —{" "}
+        <strong>BlogSy 2025</strong> is your space to shine.
       </p>
     </motion.section>
   );

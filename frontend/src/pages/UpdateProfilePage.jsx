@@ -16,7 +16,9 @@ export default function UpdateProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isSuccess, isError, message } = useSelector((state) => state.auth);
+  const { user, isSuccess, isError, message } = useSelector(
+    (state) => state.auth
+  );
   const token = user?.token;
 
   const [formData, setFormData] = useState({
@@ -67,24 +69,24 @@ export default function UpdateProfilePage() {
 
   return (
     <motion.div
-      className="max-w-xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-lg shadow- space-y-12"
+      className="w-full max-w-xl sm:max-w-2xl mx-auto mt-8 sm:mt-12 p-4 sm:p-6 md:p-10 bg-white rounded-lg shadow space-y-10 sm:space-y-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
       <motion.h2
-        className="text-3xl font-bold text-center text-slate-800 flex items-center justify-center"
+        className="text-2xl sm:text-3xl font-bold text-center text-slate-800 flex items-center justify-center"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <UserIcon className="w-6 h-6 mr-2 text-blue-600" />
+        <UserIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
         Update Profile
       </motion.h2>
 
       {localMessage && (
         <motion.p
-          className="text-green-600 text-center"
+          className="text-green-600 text-center text-sm sm:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -92,9 +94,10 @@ export default function UpdateProfilePage() {
           {localMessage}
         </motion.p>
       )}
+
       {localError && (
         <motion.p
-          className="text-red-600 text-center"
+          className="text-red-600 text-center text-sm sm:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -123,7 +126,7 @@ export default function UpdateProfilePage() {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring focus:ring-blue-300"
             required
           />
         </motion.div>
@@ -141,7 +144,7 @@ export default function UpdateProfilePage() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring focus:ring-blue-300"
             required
           />
         </motion.div>
@@ -160,24 +163,25 @@ export default function UpdateProfilePage() {
             value={formData.password}
             onChange={handleChange}
             placeholder="Leave blank to keep current password"
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring focus:ring-blue-300"
           />
         </motion.div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mt-6">
           <motion.button
             type="submit"
-            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="w-full sm:w-auto flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <SaveIcon className="w-4 h-4 mr-2" />
             Save Changes
           </motion.button>
+
           <motion.button
             type="button"
             onClick={() => navigate("/profile")}
-            className="flex items-center text-gray-600 hover:text-gray-800"
+            className="w-full sm:w-auto flex items-center justify-center text-gray-600 hover:text-gray-800"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -189,18 +193,3 @@ export default function UpdateProfilePage() {
     </motion.div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

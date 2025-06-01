@@ -125,7 +125,7 @@ export default function ProfilePage() {
           >
             <PencilIcon className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Edit Profile</span>
-            <span className="sm:hidden">Edit</span>
+            <span className="sm:hidden">Edit your Profile</span>
           </motion.button>
         </div>
 

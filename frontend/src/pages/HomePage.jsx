@@ -25,7 +25,7 @@ export default function HomePage() {
       <About />
 
       {/* Action Buttons */}
-      <div className="flex flex-row sm:flex-row justify-center items-center gap-4 sm:gap-6 px-4 py-8 sm:py-12">
+      <div className="flex flex-row sm:flex-row justify-center items-center gap-4 sm:gap-6 px-4 py-4 sm:py-12">
         {/* Trending Blogs Button */}
         <Link
           to="/trending"

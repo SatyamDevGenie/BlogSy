@@ -36,8 +36,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex flex-col leading-tight">
-          <span className="text-3xl font-extrabold text-gray-900">BlogSy</span>
-          <span className="text-xs text-blue-300 tracking-wide">Explore your blogs</span>
+          <span className="text-3xl font-bold text-gray-900">BlogSy</span>
+          <span className="text-xs text-blue-300 tracking-wide ml-3">Explore your blogs</span>
         </Link>
 
         {/* Desktop Menu */}

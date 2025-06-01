@@ -8,7 +8,9 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (user || isSuccess) navigate("/");
@@ -23,28 +25,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 bg-gray-100">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
+        className="bg-white w-full max-w-sm sm:max-w-md md:max-w-lg p-6 sm:p-8 rounded-2xl shadow-lg"
       >
         <motion.h1
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl font-semibold text-center mb-2"
+          className="text-xl sm:text-2xl md:text-3xl font-semibold text-center mb-2 text-slate-800"
         >
           Login
         </motion.h1>
 
-        {/* Emotional prompt */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-center text-gray-600 mb-6 italic"
+          className="text-center text-gray-600 mb-6 italic text-sm sm:text-base"
         >
           To see your favorite stories, please log in ❤️
         </motion.p>
@@ -53,7 +54,7 @@ export default function LoginPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-red-100 text-red-700 p-3 rounded mb-4"
+            className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"
           >
             {message}
           </motion.div>
@@ -64,7 +65,7 @@ export default function LoginPage() {
             <motion.div key={field} whileFocus={{ scale: 1.02 }}>
               <label
                 htmlFor={field}
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium text-slate-700 mb-1"
               >
                 {field.charAt(0).toUpperCase() + field.slice(1)}
               </label>
@@ -72,10 +73,8 @@ export default function LoginPage() {
                 id={field}
                 name={field}
                 type={field}
-                placeholder={
-                  field === "email" ? "you@example.com" : "••••••••"
-                }
-                className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder={field === "email" ? "you@example.com" : "••••••••"}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
                 value={form[field]}
                 onChange={handleChange}
                 required
@@ -86,7 +85,7 @@ export default function LoginPage() {
 
           <motion.button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium transition text-sm sm:text-base"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
