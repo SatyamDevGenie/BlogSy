@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -18,12 +19,23 @@ export default function RegisterPage() {
   );
 
   useEffect(() => {
-    if (user || isSuccess) navigate("/");
+    if (isError) {
+      toast.error(message || "Registration failed. Please try again.");
+    }
+
+    if (isSuccess && user) {
+      toast.success(
+        `${user.name || user.username || user.email} Register Successfully 🎉`
+      );
+      navigate("/");
+    }
+
     dispatch(reset());
-  }, [user, isSuccess, navigate, dispatch]);
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(register(formData));
@@ -54,16 +66,6 @@ export default function RegisterPage() {
         >
           Join our blogging platform and share your ideas
         </motion.p>
-
-        {isError && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"
-          >
-            {message}
-          </motion.div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {["username", "email", "password"].map((field) => (

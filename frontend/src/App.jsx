@@ -8,7 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import SingleBlogPage from "./pages/SingleBlogPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
-import EditBlogPage from "./pages/EditBlogPage"; //
+import EditBlogPage from "./pages/EditBlogPage";
 import TrendingPage from "./pages/TrendingPage";
 import LatestBlogPage from "./pages/LatestBlogPage";
 
@@ -87,7 +87,18 @@ export default function App() {
       </BrowserRouter>
 
       {/* Toast container */}
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }

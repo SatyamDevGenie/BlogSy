@@ -111,7 +111,7 @@ export default function ProfilePage() {
       >
         {/* Title Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 mb-2">
-          <h1 className="text-2xl sm:text-4xl font-bold text-slate-800 flex items-center justify-center">
+          <h1 className="text-2xl sm:text-4xl font-semibold text-slate-800 flex items-center justify-center">
             <UserIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 mr-2" />
             <span className="truncate">{profile.username}'s Profile</span>
           </h1>

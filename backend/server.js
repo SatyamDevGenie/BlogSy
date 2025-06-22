@@ -23,6 +23,7 @@ const app = express(); // 🖥️ Initialize Express server
 app.use(express.json()); // 📨 Parse JSON request body
 app.use(cors()); // 🔓 Allow cross-origin requests
 
+// Ready for Backend Production Deployment
 
 // Correct way to serve static files
 const __dirname = path.resolve();

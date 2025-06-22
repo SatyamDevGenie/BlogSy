@@ -10,6 +10,8 @@ import {
   UserPlusIcon,
   UserMinusIcon,
 } from "@heroicons/react/24/solid";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 export default function SingleBlogPage() {
   const { id } = useParams();
@@ -81,9 +83,22 @@ export default function SingleBlogPage() {
           headers: { Authorization: `Bearer ${token}` },
         };
         await axios.delete(`http://localhost:5000/api/blogs/${id}`, config);
+        toast.success("✅ Blog Deleted Successfully", {
+          position: "top-center",
+          style: {
+            fontSize: "14px",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            background: "#ecfdf5",
+            color: "#000",
+            fontWeight: "bold",
+            fontFamily: "Segoe UI, sans-serif",
+            border: "1px solid #6ee7b7",
+          },
+        });
         navigate("/");
       } catch (err) {
-        alert(err.response?.data?.message || "Failed to delete blog.");
+        toast.error(err.response?.data?.message || "Failed to delete blog.");
       }
     }
   };

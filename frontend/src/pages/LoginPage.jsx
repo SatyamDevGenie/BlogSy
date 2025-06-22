@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -13,12 +14,23 @@ export default function LoginPage() {
   );
 
   useEffect(() => {
-    if (user || isSuccess) navigate("/");
-    dispatch(reset());
-  }, [user, isSuccess, navigate, dispatch]);
+    if (isSuccess && user) {
+      toast.success(
+        `${user.name || user.username || user.email} Login Successfully 🎉`
+      );
+      navigate("/");
+      dispatch(reset());
+    }
+
+    if (isError) {
+      toast.error(message || "Login failed. Please check your credentials.");
+      dispatch(reset());
+    }
+  }, [isSuccess, isError, message, navigate, dispatch]);
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(form));
@@ -49,16 +61,6 @@ export default function LoginPage() {
         >
           To see your favorite stories, please log in ❤️
         </motion.p>
-
-        {isError && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"
-          >
-            {message}
-          </motion.div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {["email", "password"].map((field) => (
