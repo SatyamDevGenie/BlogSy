@@ -18,11 +18,27 @@ export default function HomePage() {
     dispatch(fetchBlogs());
   }, [dispatch]);
 
+  // Motion Variants for Stagger Effect
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <>
       <Navbar />
 
-      {/* Header Section */}
+      {/* Hero/About Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,58 +49,78 @@ export default function HomePage() {
 
       {/* Action Buttons */}
       <motion.div
-        className="flex flex-row sm:flex-row justify-center items-center gap-4 sm:gap-6 px-4 py-4 sm:py-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
+        className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 px-4 py-6 sm:py-10"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
       >
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <Link
             to="/trending"
-            className="group w-full sm:w-48 flex justify-center items-center gap-2 px-5 py-3 rounded-full text-white text-sm sm:text-base bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-md hover:from-purple-600 hover:to-red-600 transition-all duration-300"
+            className="group flex justify-center items-center gap-2 px-6 py-3 rounded-full text-white text-sm sm:text-base bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-md hover:shadow-lg hover:from-purple-600 hover:to-red-600 transition-all duration-300"
           >
             <span className="text-lg group-hover:animate-bounce">🔥</span>
-            <span className="font-medium">Trending Blogs</span>
+            <span className="font-semibold">Trending Blogs</span>
           </Link>
         </motion.div>
 
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <Link
             to="/createBlog"
-            className="group w-full sm:w-48 flex justify-center items-center gap-2 px-5 py-3 rounded-full text-white text-sm sm:text-base bg-gradient-to-r from-blue-600 to-cyan-500 shadow-md hover:from-blue-700 hover:to-cyan-600 transition-all duration-300"
+            className="group flex justify-center items-center gap-2 px-6 py-3 rounded-full text-white text-sm sm:text-base bg-gradient-to-r from-blue-600 to-cyan-500 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-cyan-600 transition-all duration-300"
           >
             <span className="text-xl font-bold group-hover:rotate-90 transition-transform duration-300">
               +
             </span>
-            <span className="font-medium">Create Blog</span>
+            <span className="font-semibold">Create Blog</span>
           </Link>
         </motion.div>
       </motion.div>
 
-      {/* Blog Grid */}
+      {/* Blog Grid Section */}
       <motion.div
-        className="px-4 sm:px-6 md:px-8 py-8 sm:py-10 mt-3 min-h-[60vh]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        className="px-4 sm:px-6 md:px-8 py-10 sm:py-12 mt-3 min-h-[60vh]"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
       >
+
         {isLoading ? (
-          <p className="text-center text-gray-500 animate-pulse">
-            Loading blogs...
-          </p>
+          // ✅ Skeleton Loader for better UX
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-gray-200 animate-pulse rounded-lg h-48"
+              ></div>
+            ))}
+          </div>
         ) : isError ? (
           <p className="text-center text-red-500">{message}</p>
         ) : blogs.length === 0 ? (
-          <p className="text-center text-gray-500">No blogs found.</p>
+          <div className="flex flex-col items-center justify-center text-gray-500">
+            <img
+              src="/empty-state.svg"
+              alt="No blogs"
+              className="w-52 mb-4 opacity-80"
+            />
+            <p>No blogs found. Start creating your first blog!</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {blogs.map((blog, index) => (
               <motion.div
                 key={blog._id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="transform transition duration-300 hover:scale-105"
+                variants={itemVariants}
+                className="hover:scale-105 transform transition duration-300"
               >
                 <BlogCard blog={blog} />
               </motion.div>

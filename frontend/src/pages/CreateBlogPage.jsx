@@ -4,8 +4,8 @@ import { createBlog } from "../features/blog/blogSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
-import { Bold } from "lucide-react";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
@@ -35,20 +35,7 @@ export default function CreateBlogPage() {
       });
       return data.filePath;
     } catch (err) {
-      console.error("Upload Error:", err.message);
-      toast.error("Image upload failed. Please try again.", {
-        position: "top-center",
-        style: {
-          fontSize: "14px",
-          padding: "10px 16px",
-          background: "#ffe4e6",
-          color: "#7f1d1d",
-          fontWeight: 500,
-          border: "1px solid #fca5a5",
-          borderRadius: "8px",
-        },
-        icon: "❌",
-      });
+      toast.error("Image upload failed. Please try again.");
       return null;
     }
   };
@@ -56,9 +43,7 @@ export default function CreateBlogPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content || !imageFile) {
-      return toast.error("All fields are required.", {
-        position: "top-center",
-      });
+      return toast.error("All fields are required.");
     }
 
     const uploadedImageUrl = await handleImageUpload();
@@ -68,20 +53,7 @@ export default function CreateBlogPage() {
     dispatch(createBlog(blogData));
     navigate("/");
 
-    toast.success("✅ Blog Created Successfully", {
-      position: "top-center",
-      style: {
-        fontSize: "14px",
-        padding: "10px 16px",
-        borderRadius: "8px",
-        background: "#ecfdf5",
-        color: "#000",
-        fontWeight: "bold",
-        fontFamily: "Segoe UI, sans-serif",
-        border: "1px solid #6ee7b7",
-      },
-      icon: "📝",
-    });
+    toast.success("✅ Blog Created Successfully");
   };
 
   const handleFileChange = (e) => {
@@ -93,12 +65,24 @@ export default function CreateBlogPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="bg-white shadow-lg rounded-xl p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+    <motion.div
+      className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-gray-200"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        {/* Heading */}
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
           📝 Create Your Blog
         </h2>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
@@ -107,7 +91,7 @@ export default function CreateBlogPage() {
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter a catchy blog title"
@@ -122,7 +106,7 @@ export default function CreateBlogPage() {
             </label>
             <textarea
               rows="6"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Write something engaging..."
@@ -143,27 +127,39 @@ export default function CreateBlogPage() {
               required
             />
             {imagePreview && (
-              <img
+              <motion.img
                 src={imagePreview}
                 alt="Preview"
-                className="mt-4 w-full h-60 object-cover rounded-md border"
+                className="mt-4 w-full h-60 object-cover rounded-lg border hover:scale-105 transition-transform duration-300"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
               />
             )}
           </div>
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <button
+            <motion.button
               type="submit"
               disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-md transition-all duration-300 disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-all duration-300 disabled:opacity-50 flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {isLoading ? "Creating..." : "Create Blog"}
-            </button>
+              {isLoading ? (
+                <>
+                  <span className="animate-spin border-2 border-t-2 border-white rounded-full w-4 h-4"></span>
+                  Creating...
+                </>
+              ) : (
+                "Create Blog"
+              )}
+            </motion.button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
