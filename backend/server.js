@@ -1,49 +1,63 @@
 // 📦 Imports
-import dotenv from "dotenv"; // 🛠️ Load environment variables
-import express from "express"; // 🚀 Create Express app
-import chalk from "chalk"; // 🎨 Stylish console logs
-import cors from "cors"; // 🌐 Enable CORS
-import path from "path"; // 📁 For static file handling
-import connectDB from "./config/db.js"; // 🔗 MongoDB connection
-import { notFound, errorHandler } from "./middlewares/errorMiddleware.js"; // ❌ Error handlers
+import dotenv from "dotenv";
+import express from "express";
+import chalk from "chalk";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
+import connectDB from "./config/db.js";
+import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 // 🛣️ Routes
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js"; // 📤 File upload route
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 // ⚙️ Environment Setup
-dotenv.config(); // 📂 Load .env variables
-connectDB(); // 🧬 Connect to MongoDB
+dotenv.config();
+connectDB();
 
-const app = express(); // 🖥️ Initialize Express server
+const app = express();
 
 // 🛠️ Middlewares
-app.use(express.json()); // 📨 Parse JSON request body
-app.use(cors()); // 🔓 Allow cross-origin requests
+app.use(express.json());
+app.use(cors());
 
-// Ready for Backend Production Deployment
+// ✅ Ensure uploads folder exists
+const uploadDir = "uploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-// Correct way to serve static files
+// ✅ Serve uploads folder
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-
 // ✅ API Health Check
-app.get("/", (req, res) => {
-  res.send("BlogSy API is running");
+app.get("/api/health", (req, res) => {
+  res.send("✅ API is running...");
 });
 
-// 🛣️ API Routes
+// ✅ API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/upload", uploadRoutes); // File upload route
+app.use("/api/upload", uploadRoutes);
 
-// ❌ Error handling middlewares
-app.use(notFound); // 404 Not Found
-app.use(errorHandler); // General error handler
+// ✅ Serve frontend in production
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "/frontend/dist");
+  app.use(express.static(frontendPath));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(frontendPath, "index.html"))
+  );
+}
+
+// ❌ Error handling
+app.use(notFound);
+app.use(errorHandler);
 
 // 🚀 Start server
 const PORT = process.env.PORT || 5000;
