@@ -154,44 +154,64 @@ export default function ProfilePage() {
         </p>
       </motion.div>
 
-      {/* ✅ Basic Info */}
+      {/* ✅ Basic Info Section */}
       <motion.section
-        className="bg-white rounded-xl shadow-md p-4 sm:p-6"
+        className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100"
         variants={itemVariants}
       >
-        <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-slate-800">
-          <MailIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-gray-500" />
+        {/* Section Heading */}
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 flex items-center text-slate-800">
+          <MailIcon className="w-6 h-6 mr-3 text-blue-600" />
           Basic Info
         </h2>
-        <div className="space-y-3 text-gray-700 text-sm sm:text-base">
-          <div className="flex flex-wrap items-center gap-1">
-            <strong>Email:</strong>
-            <span>{profile?.email || "Not Provided"}</span>
+
+        {/* Info Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 text-sm sm:text-base">
+
+          {/* Email */}
+          <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-4 hover:shadow-sm transition">
+            <div className="bg-blue-100 p-2 rounded-full">
+              <MailIcon className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-xs uppercase font-semibold">Email</p>
+              <p className="font-medium">{profile?.email || "Not Provided"}</p>
+            </div>
           </div>
-          <div>
-            <strong className="flex items-center mb-1">
-              <UsersIcon className="inline w-4 h-4 mr-1 text-green-600" />
-              Followers:
-            </strong>
-            <span>
-              {profile?.followers?.length
-                ? profile.followers.map((f) => f.username).join(", ")
-                : "No followers"}
-            </span>
+
+          {/* Followers */}
+          <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-4 hover:shadow-sm transition">
+            <div className="bg-green-100 p-2 rounded-full">
+              <UsersIcon className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-xs uppercase font-semibold">Followers</p>
+              <p className="font-medium">
+                {profile?.followers?.length
+                  ? profile.followers.map((f) => f.username).join(", ")
+                  : "No followers"}
+              </p>
+            </div>
           </div>
-          <div>
-            <strong className="flex items-center mb-1">
-              <UserPlusIcon className="inline w-4 h-4 mr-1 text-indigo-600" />
-              Following:
-            </strong>
-            <span>
-              {profile?.following?.length
-                ? profile.following.map((f) => f.username).join(", ")
-                : "None"}
-            </span>
+
+          {/* Following */}
+          <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-4 hover:shadow-sm transition sm:col-span-2">
+            <div className="bg-indigo-100 p-2 rounded-full">
+              <UserPlusIcon className="w-5 h-5 text-indigo-600" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-xs uppercase font-semibold">Following</p>
+              <p className="font-medium">
+                {profile?.following?.length
+                  ? profile.following.map((f) => f.username).join(", ")
+                  : "None"}
+              </p>
+            </div>
           </div>
+
         </div>
       </motion.section>
+
 
       {/* ✅ Favourite Blogs */}
       <motion.section

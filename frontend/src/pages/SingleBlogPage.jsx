@@ -26,6 +26,8 @@ export default function SingleBlogPage() {
   const [favLoading, setFavLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
 
   const user = useSelector((state) => state.auth.user);
   const token = user?.token;
@@ -57,13 +59,26 @@ export default function SingleBlogPage() {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const res = await axios.get(
-        `/api/users/${authorId}/follow-status`,
-        config
-      );
+
+      const res = await axios.get(`/api/users/${authorId}/follow-status`, config);
       setIsFollowing(res.data.isFollowing);
+
+      toast.info(
+        res.data.isFollowing
+          ? "✅ You are following this author"
+          : "ℹ️ You are not following this author yet",
+        {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: true,
+        }
+      );
     } catch (err) {
       console.error("Error checking follow status:", err);
+      toast.error("❌ Failed to check follow status", {
+        position: "top-center",
+        autoClose: 1500,
+      });
     }
   };
 
@@ -76,32 +91,37 @@ export default function SingleBlogPage() {
     }
   }, [id, token]);
 
-  const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${token}` },
-        };
-        await axios.delete(`/api/blogs/${id}`, config);
-        toast.success("✅ Blog Deleted Successfully", {
-          position: "top-center",
-          style: {
-            fontSize: "14px",
-            padding: "10px 16px",
-            borderRadius: "8px",
-            background: "#ecfdf5",
-            color: "#000",
-            fontWeight: "bold",
-            fontFamily: "Segoe UI, sans-serif",
-            border: "1px solid #6ee7b7",
-          },
-        });
-        navigate("/");
-      } catch (err) {
-        toast.error(err.response?.data?.message || "Failed to delete blog.");
-      }
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true); // Show the warning box
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      await axios.delete(`/api/blogs/${id}`, config);
+      toast.success("✅ Blog Deleted Successfully", {
+        position: "top-center",
+        style: {
+          fontSize: "14px",
+          padding: "10px 16px",
+          borderRadius: "8px",
+          background: "#ecfdf5",
+          color: "#000",
+          fontWeight: "bold",
+          fontFamily: "Segoe UI, sans-serif",
+          border: "1px solid #6ee7b7",
+        },
+      });
+      navigate("/");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete blog.");
+    } finally {
+      setShowDeleteModal(false);
     }
   };
+
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -128,59 +148,109 @@ export default function SingleBlogPage() {
         author: prev.author,
       }));
       setComment("");
-      // Reload the page after successful comment
-      window.location.reload();
     } catch (err) {
       setCommentError(err.response?.data?.message || "Failed to post comment.");
     }
   };
 
   const handleLikeToggle = async () => {
-    if (!user) return alert("Login to like the blog.");
+    if (!user) return toast.warning("⚠️ Please login to like the blog.", {
+      position: "top-center",
+      autoClose: 1500,
+    });
+
     try {
       setLikeLoading(true);
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const res = await axios.put(
-        `/api/blogs/${id}/like`,
-        {},
-        config
-      );
+
+      const res = await axios.put(`/api/blogs/${id}/like`, {}, config);
       setBlog(res.data);
-      // Reload the page after successful comment
-      window.location.reload();
+
+      // Check if blog is liked by user
+      const isLiked = res.data.likes.includes(user._id);
+
+      if (isLiked) {
+        toast.success("❤️ You liked the blog", {
+          position: "bottom-center",
+          autoClose: 1500,
+          style: {
+            fontSize: "14px",
+            fontWeight: "600",
+            background: "#fef2f2",
+            color: "#dc2626",
+            borderRadius: "8px",
+            padding: "10px 14px",
+          },
+        });
+      }
+
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to like blog.");
+      toast.error(err.response?.data?.message || "Failed to like blog.", {
+        position: "bottom-center",
+        autoClose: 1500,
+      });
     } finally {
       setLikeLoading(false);
     }
   };
 
+
   const handleFavoriteToggle = async () => {
-    if (!user) return alert("Login to favorite the blog.");
+    if (!user)
+      return toast.warning("⚠️ Please login to favorite the blog.", {
+        position: "top-center",
+        autoClose: 1500,
+      });
+
     try {
       setFavLoading(true);
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const res = await axios.put(
-        `/api/users/favourites/${id}`,
-        {},
-        config
-      );
-      alert(res.data.message);
-      // Reload the page after successful comment
-      window.location.reload();
+
+      const res = await axios.put(`/api/users/favourites/${id}`, {}, config);
+
+      const message = res.data.message || "Action completed successfully";
+
+      // ✅ Show success toast
+      toast.success(message, {
+        position: "bottom-center",
+        autoClose: 1500,
+        style: {
+          fontSize: "14px",
+          fontWeight: "600",
+          background: message.includes("Removed") ? "#fff7ed" : "#fef2f2",
+          color: message.includes("Removed") ? "#f97316" : "#dc2626",
+          borderRadius: "8px",
+          padding: "10px 14px",
+        },
+      });
+
+      // ✅ Update blog state without reloading page
+      setBlog((prev) => ({
+        ...prev,
+        favorites: res.data.favorites, // Assuming backend returns updated favorites array
+      }));
+
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to favorite blog.");
+      toast.error(err.response?.data?.message || "Failed to favorite blog.", {
+        position: "bottom-center",
+        autoClose: 1500,
+      });
     } finally {
       setFavLoading(false);
     }
   };
 
+
   const handleFollowToggle = async () => {
-    if (!user) return alert("Please login to follow users");
+    if (!user)
+      return toast.warning("⚠️ Please login to follow users", {
+        position: "top-center",
+        autoClose: 1500,
+      });
 
     try {
       setFollowLoading(true);
@@ -189,21 +259,35 @@ export default function SingleBlogPage() {
       };
 
       const endpoint = isFollowing ? "unfollow" : "follow";
-      await axios.put(
-        `/api/users/${endpoint}/${blog.author._id}`,
-        {},
-        config
-      );
+      const res = await axios.put(`/api/users/${endpoint}/${blog.author._id}`, {}, config);
 
+      // Update local state
       setIsFollowing(!isFollowing);
-      // Reload the page after successful comment
-      window.location.reload();
+
+      // ✅ Toast notification for follow/unfollow
+      toast.success(isFollowing ? "❌ You unfollowed this author" : "✅ You are now following this author", {
+        position: "top-center",
+        autoClose: 1500,
+        style: {
+          fontSize: "14px",
+          fontWeight: "600",
+          background: isFollowing ? "#fff7ed" : "#ecfdf5",
+          color: isFollowing ? "#f97316" : "#16a34a",
+          borderRadius: "8px",
+          padding: "10px 14px",
+        },
+      });
+
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to update follow status");
+      toast.error(err.response?.data?.message || "Failed to update follow status", {
+        position: "top-center",
+        autoClose: 1500,
+      });
     } finally {
       setFollowLoading(false);
     }
   };
+
 
   const isOwner = user && blog?.author?._id === user._id;
   const isLikedByUser = blog?.likes?.includes(user?._id);
@@ -247,7 +331,7 @@ export default function SingleBlogPage() {
               <PencilSquareIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
             </Link>
             <button
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
               className="bg-white p-2 sm:p-2.5 rounded-full shadow-md hover:bg-gray-100"
               title="Delete Blog"
             >
@@ -283,11 +367,10 @@ export default function SingleBlogPage() {
               <button
                 onClick={handleFollowToggle}
                 disabled={followLoading}
-                className={`w-fit sm:w-auto self-start flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isFollowing
+                className={`w-fit sm:w-auto self-start flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isFollowing
                     ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
                     : "bg-blue-600 text-white hover:bg-blue-700"
-                } ${followLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                  } ${followLoading ? "opacity-70 cursor-not-allowed" : ""}`}
               >
                 {followLoading ? (
                   <span className="inline-flex items-center">
@@ -342,9 +425,8 @@ export default function SingleBlogPage() {
             <button
               onClick={handleLikeToggle}
               disabled={likeLoading}
-              className={`group flex items-center gap-1 text-base font-medium transition duration-200 ${
-                isLikedByUser ? "text-red-600" : "text-gray-600"
-              } hover:scale-105 hover:text-red-500 active:scale-95`}
+              className={`group flex items-center gap-1 text-base font-medium transition duration-200 ${isLikedByUser ? "text-red-600" : "text-gray-600"
+                } hover:scale-105 hover:text-red-500 active:scale-95`}
               title={isLikedByUser ? "Unlike" : "Like"}
             >
               <span className="transition duration-200 group-hover:scale-125">
@@ -368,9 +450,8 @@ export default function SingleBlogPage() {
           <button
             onClick={handleFavoriteToggle}
             disabled={favLoading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition ${
-              isFavorited ? "bg-red-500" : "bg-gray-600"
-            } hover:scale-105 active:scale-95`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition ${isFavorited ? "bg-red-500" : "bg-gray-600"
+              } hover:scale-105 active:scale-95`}
           >
             <HeartIcon className="h-5 w-5" />
             {isFavorited ? "Favorited" : "Add to Favorites"}
@@ -403,11 +484,10 @@ export default function SingleBlogPage() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className={`px-5 py-2 rounded-full text-sm sm:text-base text-white transition shadow-md ${
-                    loading
+                  className={`px-5 py-2 rounded-full text-sm sm:text-base text-white transition shadow-md ${loading
                       ? "bg-blue-400 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"
-                  }`}
+                    }`}
                   disabled={loading}
                 >
                   {loading ? "Posting..." : "Post Comment"}
@@ -456,6 +536,32 @@ export default function SingleBlogPage() {
           )}
         </div>
       </div>
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              ⚠️ Are you sure you want to delete this blog?
+            </h3>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
+
+
   );
 }
