@@ -20,13 +20,14 @@ const importData = async () => {
     // 👥 Insert users
     const createdUsers = await User.insertMany(users);
 
-    // 👤 Use first user (Admin) as blog author
+    // ✅ Option: Make first user admin
     const adminUserId = createdUsers[0]._id;
 
-    // 📝 Attach author to each blog
-    const sampleBlogs = blogs.map((blog) => ({
+    // 📝 Attach different authors for each blog
+    const sampleBlogs = blogs.map((blog, index) => ({
       ...blog,
-      author: adminUserId,
+      author: createdUsers[index % createdUsers.length]._id, // Assign users in order
+      // OR use random user: createdUsers[Math.floor(Math.random() * createdUsers.length)]._id
     }));
 
     // ➕ Insert blogs

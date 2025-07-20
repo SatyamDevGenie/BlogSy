@@ -36,7 +36,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `https://blogsy-yttu.onrender.com/api/blogs/${id}`,
+        `/api/blogs/${id}`,
         config
       );
       setBlog(res.data);
@@ -58,7 +58,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `https://blogsy-yttu.onrender.com/api/users/${authorId}/follow-status`,
+        `/api/users/${authorId}/follow-status`,
         config
       );
       setIsFollowing(res.data.isFollowing);
@@ -82,7 +82,7 @@ export default function SingleBlogPage() {
         const config = {
           headers: { Authorization: `Bearer ${token}` },
         };
-        await axios.delete(`https://blogsy-yttu.onrender.com/api/blogs/${id}`, config);
+        await axios.delete(`/api/blogs/${id}`, config);
         toast.success("✅ Blog Deleted Successfully", {
           position: "top-center",
           style: {
@@ -119,7 +119,7 @@ export default function SingleBlogPage() {
         },
       };
       const res = await axios.post(
-        `https://blogsy-yttu.onrender.com/api/blogs/${id}/comment`,
+        `/api/blogs/${id}/comment`,
         { comment },
         config
       );
@@ -143,7 +143,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.put(
-        `https://blogsy-yttu.onrender.com/api/blogs/${id}/like`,
+        `/api/blogs/${id}/like`,
         {},
         config
       );
@@ -165,7 +165,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.put(
-        `https://blogsy-yttu.onrender.com/api/users/favourites/${id}`,
+        `/api/users/favourites/${id}`,
         {},
         config
       );
@@ -190,7 +190,7 @@ export default function SingleBlogPage() {
 
       const endpoint = isFollowing ? "unfollow" : "follow";
       await axios.put(
-        `https://blogsy-yttu.onrender.com/api/users/${endpoint}/${blog.author._id}`,
+        `/api/users/${endpoint}/${blog.author._id}`,
         {},
         config
       );
