@@ -11,6 +11,7 @@ import {
   UsersIcon,
   UserPlusIcon,
   PencilIcon,
+  HomeIcon,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -23,6 +24,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // ✅ Fetch Profile Data
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -47,6 +49,7 @@ export default function ProfilePage() {
     fetchProfile();
   }, [token]);
 
+  // ✅ Handlers
   const handleRemoveFromFavourites = async (blogId) => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -60,7 +63,7 @@ export default function ProfilePage() {
   const handleEditProfile = () => navigate("/updateProfile");
   const handleBlogClick = (id) => navigate(`/blogs/${id}`);
 
-  // Animation Variants
+  // ✅ Animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
@@ -71,6 +74,7 @@ export default function ProfilePage() {
     visible: { opacity: 1, y: 0 },
   };
 
+  // ✅ Loading State
   if (loading) {
     return (
       <div className="p-8 text-center text-gray-600 text-lg font-medium">
@@ -79,6 +83,7 @@ export default function ProfilePage() {
     );
   }
 
+  // ✅ Error State
   if (error) {
     return (
       <p className="p-8 text-center text-red-600 font-semibold text-lg">
@@ -91,24 +96,52 @@ export default function ProfilePage() {
 
   return (
     <motion.div
-      className="max-w-5xl mx-auto px-4 sm:px-6 py-6 mt-8 sm:mt-12 bg-gradient-to-tr from-white via-slate-100 to-white rounded-xl shadow-xl space-y-10"
+      className="max-w-6xl mx-auto px-4 sm:px-6 py-6 mt-6 sm:mt-12 bg-gradient-to-tr from-white via-slate-100 to-white rounded-xl shadow-xl space-y-10"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      {/* Header */}
-      <motion.div
-        className="relative text-center max-w-screen-lg mx-auto"
-        variants={itemVariants}
-      >
-        <h1 className="text-2xl sm:text-4xl font-semibold text-slate-800 flex items-center justify-center">
-          <UserIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 mr-2" />
-          <span className="truncate">{profile.username}'s Profile</span>
+      {/* ✅ Back Button */}
+      <div className="flex items-center mb-6">
+        <motion.button
+          onClick={() => navigate("/")}
+          className="
+            flex items-center gap-2
+            px-4 py-2 
+            bg-gray-100 hover:bg-gray-200 
+            text-gray-700 rounded-lg shadow 
+            text-sm font-medium
+            transition-all duration-200
+          "
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <HomeIcon className="w-4 h-4 text-blue-600" />
+          Back to Home
+        </motion.button>
+      </div>
+
+      {/* ✅ Header Section */}
+      <motion.div className="relative text-center" variants={itemVariants}>
+        <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-800 flex flex-wrap items-center justify-center gap-2">
+          <UserIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" />
+          <span>{profile.username}'s Profile</span>
         </h1>
 
+        {/* ✅ Responsive Edit Button */}
         <motion.button
           onClick={handleEditProfile}
-          className="absolute right-4 top-4 px-4 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 flex items-center gap-1"
+          className="
+            mt-4 sm:mt-0
+            block sm:absolute sm:right-6 sm:top-4
+            px-4 py-2 
+            text-sm sm:text-base 
+            font-medium text-white 
+            bg-blue-600 rounded-lg shadow 
+            hover:bg-blue-700 
+            flex items-center justify-center gap-2
+            mx-auto sm:mx-0
+          "
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -121,38 +154,38 @@ export default function ProfilePage() {
         </p>
       </motion.div>
 
-      {/* Basic Info */}
+      {/* ✅ Basic Info */}
       <motion.section
-        className="bg-white rounded-xl shadow-md p-6 w-full"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6"
         variants={itemVariants}
       >
         <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-slate-800">
           <MailIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-gray-500" />
           Basic Info
         </h2>
-        <div className="space-y-4 text-gray-700 text-sm sm:text-base">
-          <div className="flex flex-wrap items-center">
-            <strong className="mr-2">Email:</strong>
+        <div className="space-y-3 text-gray-700 text-sm sm:text-base">
+          <div className="flex flex-wrap items-center gap-1">
+            <strong>Email:</strong>
             <span>{profile?.email || "Not Provided"}</span>
           </div>
-          <div className="flex flex-wrap items-center">
-            <strong className="mr-2 flex items-center">
+          <div>
+            <strong className="flex items-center mb-1">
               <UsersIcon className="inline w-4 h-4 mr-1 text-green-600" />
               Followers:
             </strong>
             <span>
-              {profile?.followers?.length > 0
+              {profile?.followers?.length
                 ? profile.followers.map((f) => f.username).join(", ")
                 : "No followers"}
             </span>
           </div>
-          <div className="flex flex-wrap items-center">
-            <strong className="mr-2 flex items-center">
+          <div>
+            <strong className="flex items-center mb-1">
               <UserPlusIcon className="inline w-4 h-4 mr-1 text-indigo-600" />
               Following:
             </strong>
             <span>
-              {profile?.following?.length > 0
+              {profile?.following?.length
                 ? profile.following.map((f) => f.username).join(", ")
                 : "None"}
             </span>
@@ -160,9 +193,9 @@ export default function ProfilePage() {
         </div>
       </motion.section>
 
-      {/* Favourite Blogs */}
+      {/* ✅ Favourite Blogs */}
       <motion.section
-        className="bg-white rounded-xl shadow-md p-6"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6"
         variants={itemVariants}
       >
         <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-pink-700">
@@ -170,17 +203,17 @@ export default function ProfilePage() {
           Favourite Blogs
         </h2>
         {profile.favourites.length ? (
-          <ul className="space-y-4">
-            {profile.favourites.map((fav, index) => (
-              <motion.li
+          <div className="flex flex-col gap-4">
+            {profile.favourites.map((fav) => (
+              <motion.div
                 key={fav._id}
-                className="bg-pink-50 border-l-4 border-pink-500 px-4 py-3 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
+                className="bg-pink-50 border-l-4 border-pink-500 p-4 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
               >
                 <div
                   onClick={() => handleBlogClick(fav._id)}
-                  className="cursor-pointer"
+                  className="cursor-pointer flex-1"
                 >
                   <strong className="text-slate-800 block truncate text-base sm:text-lg">
                     {fav.title}
@@ -190,55 +223,75 @@ export default function ProfilePage() {
                   </span>
                 </div>
                 <button
-                  className="px-3 py-1 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                  className="
+                    px-2 py-1 
+                    text-[10px] sm:text-xs
+                    bg-red-500 text-white 
+                    rounded 
+                    hover:bg-red-600 
+                    transition-all duration-200
+                    whitespace-nowrap
+                  "
                   onClick={() => handleRemoveFromFavourites(fav._id)}
                 >
                   Remove
                 </button>
-              </motion.li>
+              </motion.div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p className="text-gray-500">No favourites yet.</p>
         )}
       </motion.section>
 
-      {/* My Blogs */}
+      {/* ✅ My Blogs */}
       <motion.section
-        className="bg-white rounded-xl shadow-md p-6"
+        className="bg-white rounded-xl shadow-md p-4 sm:p-6"
         variants={itemVariants}
       >
-        <h2 className="text-lg sm:text-2xl font-semibold mb-6 flex items-center text-blue-700">
+        <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center text-blue-700">
           <FileTextIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
           My Blogs
         </h2>
+
         {blogs.length ? (
-          <ul className="space-y-6">
+          <div className="flex flex-col gap-4">
             {blogs.map((blog) => (
-              <motion.li
+              <motion.div
                 key={blog._id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between bg-blue-50 border-l-4 border-blue-500 px-4 py-4 rounded gap-4 cursor-pointer"
+                className="
+                  flex flex-col sm:flex-row items-start 
+                  bg-blue-50 border-l-4 border-blue-500 rounded-lg shadow hover:shadow-lg 
+                  overflow-hidden transition-all duration-300
+                  cursor-pointer
+                "
                 whileHover={{ scale: 1.02 }}
                 onClick={() => handleBlogClick(blog._id)}
               >
+                {/* ✅ Blog Image */}
                 {blog.image && (
                   <img
                     src={blog.image}
                     alt={blog.title}
-                    className="w-full h-40 object-cover rounded sm:w-28 sm:h-20"
+                    className="
+                      w-full sm:w-40 h-32 sm:h-auto object-cover
+                      sm:rounded-none rounded-t-lg
+                    "
                   />
                 )}
-                <div className="flex flex-col overflow-hidden">
-                  <strong className="text-slate-800 text-base sm:text-lg truncate">
+
+                {/* ✅ Blog Content */}
+                <div className="p-4 flex-1">
+                  <strong className="text-slate-800 text-base sm:text-lg block mb-1 truncate">
                     {blog.title}
                   </strong>
-                  <p className="text-gray-700 text-xs sm:text-sm mt-1 line-clamp-2">
+                  <p className="text-gray-700 text-sm sm:text-base line-clamp-2 sm:line-clamp-3">
                     {blog.content}
                   </p>
                 </div>
-              </motion.li>
+              </motion.div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p className="text-gray-500">You haven't written any blogs yet.</p>
         )}

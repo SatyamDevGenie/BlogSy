@@ -95,9 +95,12 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-900 py-4 text-center font-medium text-md text-white">
-        BlogSy {new Date().getFullYear()} Satyam Software Solutions
+      <div className="border-t border-gray-900 py-4 text-center text-md font-semibold">
+        <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent text-lg sm:text-xl tracking-wide animate-pulse">
+          BlogSy @ {new Date().getFullYear()} | Satyam Software Solutions
+        </span>
       </div>
+
     </footer>
   );
 }
