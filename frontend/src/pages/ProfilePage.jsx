@@ -61,7 +61,7 @@ export default function ProfilePage() {
   };
 
   const handleEditProfile = () => navigate("/updateProfile");
-  const handleBlogClick = (id) => navigate(`https://blogsy-yttu.onrender.com/blogs/${id}`);
+  const handleBlogClick = (id) => navigate(`/blogs/${id}`);
 
   // ✅ Animations
   const containerVariants = {

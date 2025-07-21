@@ -13,6 +13,7 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
+
 export default function SingleBlogPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -153,12 +154,14 @@ export default function SingleBlogPage() {
     }
   };
 
+
   const handleLikeToggle = async () => {
-    if (!user)
+    if (!user) {
       return toast.warning("⚠️ Please login to like the blog.", {
         position: "top-center",
         autoClose: 1500,
       });
+    }
 
     try {
       setLikeLoading(true);
@@ -166,14 +169,14 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const res = await axios.put(
-        `https://blogsy-yttu.onrender.com/api/blogs/${id}/like`,
-        {},
-        config
-      );
-      setBlog(res.data);
+      const res = await axios.put(`https://blogsy-yttu.onrender.com/api/blogs/${id}/like`, {}, config);
 
-      // Check if blog is liked by user
+      // ✅ Only update likes, not the entire blog
+      setBlog((prev) => ({
+        ...prev,
+        likes: res.data.likes,
+      }));
+
       const isLiked = res.data.likes.includes(user._id);
 
       if (isLiked) {
@@ -189,11 +192,6 @@ export default function SingleBlogPage() {
             padding: "10px 14px",
           },
         });
-
-        // ✅ Reload page after toast delay (optional for smooth UX)
-        setTimeout(() => {
-          window.location.reload();
-        }, 1600);
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to like blog.", {
