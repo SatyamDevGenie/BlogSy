@@ -154,10 +154,11 @@ export default function SingleBlogPage() {
   };
 
   const handleLikeToggle = async () => {
-    if (!user) return toast.warning("⚠️ Please login to like the blog.", {
-      position: "top-center",
-      autoClose: 1500,
-    });
+    if (!user)
+      return toast.warning("⚠️ Please login to like the blog.", {
+        position: "top-center",
+        autoClose: 1500,
+      });
 
     try {
       setLikeLoading(true);
@@ -165,7 +166,11 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const res = await axios.put(`https://blogsy-yttu.onrender.com/api/blogs/${id}/like`, {}, config);
+      const res = await axios.put(
+        `https://blogsy-yttu.onrender.com/api/blogs/${id}/like`,
+        {},
+        config
+      );
       setBlog(res.data);
 
       // Check if blog is liked by user
@@ -184,8 +189,12 @@ export default function SingleBlogPage() {
             padding: "10px 14px",
           },
         });
-      }
 
+        // ✅ Reload page after toast delay (optional for smooth UX)
+        setTimeout(() => {
+          window.location.reload();
+        }, 1600);
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to like blog.", {
         position: "bottom-center",
@@ -195,6 +204,7 @@ export default function SingleBlogPage() {
       setLikeLoading(false);
     }
   };
+
 
 
   const handleFavoriteToggle = async () => {
@@ -368,8 +378,8 @@ export default function SingleBlogPage() {
                 onClick={handleFollowToggle}
                 disabled={followLoading}
                 className={`w-fit sm:w-auto self-start flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isFollowing
-                    ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                  ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
                   } ${followLoading ? "opacity-70 cursor-not-allowed" : ""}`}
               >
                 {followLoading ? (
@@ -485,8 +495,8 @@ export default function SingleBlogPage() {
                 <button
                   type="submit"
                   className={`px-5 py-2 rounded-full text-sm sm:text-base text-white transition shadow-md ${loading
-                      ? "bg-blue-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
+                    ? "bg-blue-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
                     }`}
                   disabled={loading}
                 >
