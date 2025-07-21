@@ -30,7 +30,7 @@ export default function ProfilePage() {
       setLoading(true);
       setError(null);
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get("/api/users/profile", config);
+      const { data } = await axios.get("https://blogsy-yttu.onrender.com/api/users/profile", config);
       setProfile(data.user);
       setBlogs(data.blogs);
     } catch (err) {
@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const handleRemoveFromFavourites = async (blogId) => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.delete(`/api/users/favourites/${blogId}`, config);
+      await axios.delete(`https://blogsy-yttu.onrender.com/api/users/favourites/${blogId}`, config);
       fetchProfile();
     } catch (err) {
       alert("Failed to remove from favourites");
@@ -61,7 +61,7 @@ export default function ProfilePage() {
   };
 
   const handleEditProfile = () => navigate("/updateProfile");
-  const handleBlogClick = (id) => navigate(`/blogs/${id}`);
+  const handleBlogClick = (id) => navigate(`https://blogsy-yttu.onrender.com/blogs/${id}`);
 
   // ✅ Animations
   const containerVariants = {

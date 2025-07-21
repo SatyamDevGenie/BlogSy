@@ -38,7 +38,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `/api/blogs/${id}`,
+        `https://blogsy-yttu.onrender.com/api/blogs/${id}`,
         config
       );
       setBlog(res.data);
@@ -60,7 +60,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const res = await axios.get(`/api/users/${authorId}/follow-status`, config);
+      const res = await axios.get(`https://blogsy-yttu.onrender.com/api/users/${authorId}/follow-status`, config);
       setIsFollowing(res.data.isFollowing);
 
       toast.info(
@@ -100,7 +100,7 @@ export default function SingleBlogPage() {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      await axios.delete(`/api/blogs/${id}`, config);
+      await axios.delete(`https://blogsy-yttu.onrender.com/api/blogs/${id}`, config);
       toast.success("✅ Blog Deleted Successfully", {
         position: "top-center",
         style: {
@@ -139,7 +139,7 @@ export default function SingleBlogPage() {
         },
       };
       const res = await axios.post(
-        `/api/blogs/${id}/comment`,
+        `https://blogsy-yttu.onrender.com/api/blogs/${id}/comment`,
         { comment },
         config
       );
@@ -165,7 +165,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const res = await axios.put(`/api/blogs/${id}/like`, {}, config);
+      const res = await axios.put(`https://blogsy-yttu.onrender.com/api/blogs/${id}/like`, {}, config);
       setBlog(res.data);
 
       // Check if blog is liked by user
@@ -210,7 +210,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const res = await axios.put(`/api/users/favourites/${id}`, {}, config);
+      const res = await axios.put(`https://blogsy-yttu.onrender.com/api/users/favourites/${id}`, {}, config);
 
       const message = res.data.message || "Action completed successfully";
 
@@ -259,7 +259,7 @@ export default function SingleBlogPage() {
       };
 
       const endpoint = isFollowing ? "unfollow" : "follow";
-      const res = await axios.put(`/api/users/${endpoint}/${blog.author._id}`, {}, config);
+      const res = await axios.put(`https://blogsy-yttu.onrender.com/api/users/${endpoint}/${blog.author._id}`, {}, config);
 
       // Update local state
       setIsFollowing(!isFollowing);
