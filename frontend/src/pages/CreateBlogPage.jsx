@@ -65,101 +65,111 @@ export default function CreateBlogPage() {
   };
 
   return (
-    <motion.div
-      className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <motion.div
-        className="bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-gray-200"
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.4 }}
-      >
-        {/* Heading */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          📝 Create Your Blog
-        </h2>
+   <motion.div
+  className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  <motion.div
+    className="bg-white/90 backdrop-blur-lg shadow-xl rounded-3xl p-8 sm:p-10 border border-gray-200"
+    initial={{ scale: 0.97 }}
+    animate={{ scale: 1 }}
+    transition={{ duration: 0.4 }}
+  >
+    {/* Heading */}
+    <h2 className="text-3xl sm:text-4xl font-extrabold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+      📝 Create Your Blog
+    </h2>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Blog Title
-            </label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter a catchy blog title"
-              required
-            />
-          </div>
+    {/* Form */}
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Title */}
+      <div>
+        <label className="block mb-2 text-sm font-semibold text-gray-700">
+          Blog Title
+        </label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter a catchy blog title"
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 text-gray-800 transition-all hover:shadow-md"
+        />
+      </div>
 
-          {/* Content */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Blog Content
-            </label>
-            <textarea
-              rows="6"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write something engaging..."
-              required
-            ></textarea>
-          </div>
+      {/* Content */}
+      <div>
+        <label className="block mb-2 text-sm font-semibold text-gray-700">
+          Blog Content
+        </label>
+        <textarea
+          rows="6"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write something engaging..."
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 text-gray-800 transition-all hover:shadow-md resize-none"
+        ></textarea>
+      </div>
 
-          {/* Image Upload */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Upload Cover Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-lg file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              required
-            />
-            {imagePreview && (
-              <motion.img
-                src={imagePreview}
-                alt="Preview"
-                className="mt-4 w-full h-60 object-cover rounded-lg border hover:scale-105 transition-transform duration-300"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              />
-            )}
-          </div>
+      {/* Image Upload */}
+      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-500 transition-all cursor-pointer">
+        <label className="block mb-2 text-sm font-semibold text-gray-700">
+          Upload Cover Image
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          required
+          className="hidden"
+          id="imageUpload"
+        />
+        <label
+          htmlFor="imageUpload"
+          className="flex flex-col items-center justify-center gap-2 text-gray-500"
+        >
+          <span className="text-4xl text-blue-500">📷</span>
+          <span className="text-sm">Click or drag & drop to upload</span>
+        </label>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-all duration-300 disabled:opacity-50 flex items-center gap-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {isLoading ? (
-                <>
-                  <span className="animate-spin border-2 border-t-2 border-white rounded-full w-4 h-4"></span>
-                  Creating...
-                </>
-              ) : (
-                "Create Blog"
-              )}
-            </motion.button>
-          </div>
-        </form>
-      </motion.div>
-    </motion.div>
+        {imagePreview && (
+          <motion.img
+            src={imagePreview}
+            alt="Preview"
+            className="mt-6 w-full h-64 object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          />
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-end">
+        <motion.button
+          type="submit"
+          disabled={isLoading}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 flex items-center gap-2 text-lg"
+          whileHover={{ scale: 1.07 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isLoading ? (
+            <>
+              <span className="animate-spin border-4 border-t-4 border-white rounded-full w-5 h-5"></span>
+              Creating...
+            </>
+          ) : (
+            "Create Blog"
+          )}
+        </motion.button>
+      </div>
+    </form>
+  </motion.div>
+</motion.div>
+
   );
 }
 

@@ -36,11 +36,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex flex-col leading-tight">
-          <span className="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 text-transparent bg-clip-text">
+          <span className="text-3xl font-extrabold text-black">
             BlogSy
           </span>
           <span className="text-xs text-indigo-400 tracking-wide ml-1">
-            Explore your blogs
+            Explore your blogs 2025
           </span>
         </Link>
 

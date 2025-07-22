@@ -131,102 +131,107 @@ export default function EditBlogPage() {
     );
 
   return (
-    <motion.div
-      className="max-w-3xl mx-auto px-4 sm:px-6 py-10"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
-      <motion.h1
-        className="text-3xl font-bold text-center mb-8 text-slate-800"
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
+   <motion.div
+  className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  {/* Heading */}
+  <motion.h1
+    className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text"
+    initial={{ scale: 0.9 }}
+    animate={{ scale: 1 }}
+  >
+    ✍️ Edit Blog
+  </motion.h1>
+
+  {/* Form */}
+  <motion.form
+    onSubmit={handleSubmit}
+    className="bg-white rounded-3xl shadow-lg p-8 space-y-8 border border-gray-200"
+    initial={{ scale: 0.98 }}
+    animate={{ scale: 1 }}
+  >
+    {/* Title */}
+    <div>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">
+        Blog Title
+      </label>
+      <input
+        type="text"
+        name="title"
+        value={formData.title}
+        onChange={handleChange}
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 text-gray-800 transition-all hover:shadow-md"
+        placeholder="Enter blog title"
+      />
+    </div>
+
+    {/* Content */}
+    <div>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">
+        Blog Content
+      </label>
+      <textarea
+        name="content"
+        value={formData.content}
+        onChange={handleChange}
+        rows={8}
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 text-gray-800 transition-all hover:shadow-md resize-none"
+        placeholder="Write your blog content..."
+      ></textarea>
+    </div>
+
+    {/* Image Upload */}
+    <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-500 transition-all cursor-pointer">
+      <label className="block mb-2 text-sm font-semibold text-gray-700">
+        Upload New Image (optional)
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+      />
+      {imagePreview && (
+        <motion.img
+          src={imagePreview}
+          alt="Preview"
+          className="mt-6 w-full h-64 object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        />
+      )}
+    </div>
+
+    {/* Error */}
+    {isError && <p className="text-red-500 text-center font-medium">{message}</p>}
+
+    {/* Submit Button */}
+    <motion.div className="flex justify-center">
+      <motion.button
+        type="submit"
+        disabled={isLoading}
+        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 flex items-center gap-2 text-lg"
+        whileHover={{ scale: 1.07 }}
+        whileTap={{ scale: 0.95 }}
       >
-        ✍️ Edit Blog
-      </motion.h1>
-
-      <motion.form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-lg p-6 space-y-6 border border-gray-200"
-        initial={{ scale: 0.98 }}
-        animate={{ scale: 1 }}
-      >
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-            className="w-full border rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter blog title"
-          />
-        </div>
-
-        {/* Content */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Content
-          </label>
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows={6}
-            required
-            className="w-full border rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            placeholder="Write your blog content..."
-          ></textarea>
-        </div>
-
-        {/* Image Upload */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Upload New Image (optional)
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          />
-          {imagePreview && (
-            <motion.img
-              src={imagePreview}
-              alt="Preview"
-              className="mt-4 w-full h-56 object-cover rounded-lg border hover:scale-105 transition-transform duration-300"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-            />
-          )}
-        </div>
-
-        {/* Error */}
-        {isError && <p className="text-red-500 text-sm">{message}</p>}
-
-        {/* Submit Button */}
-        <motion.button
-          type="submit"
-          disabled={isLoading}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isLoading ? (
-            <>
-              <span className="animate-spin border-2 border-t-2 border-white rounded-full w-4 h-4"></span>
-              Updating...
-            </>
-          ) : (
-            "Update Blog"
-          )}
-        </motion.button>
-      </motion.form>
+        {isLoading ? (
+          <>
+            <span className="animate-spin border-4 border-t-4 border-white rounded-full w-5 h-5"></span>
+            Updating...
+          </>
+        ) : (
+          "Update Blog"
+        )}
+      </motion.button>
     </motion.div>
+  </motion.form>
+</motion.div>
+
   );
 }

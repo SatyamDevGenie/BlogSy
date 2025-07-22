@@ -30,8 +30,8 @@ app.use(cors());
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-// ✅ API Health Check
-app.get("/api/blogsy25", (req, res) => {
+// ✅ API Check
+app.get("/", (req, res) => {
   res.send("✅ API is running...");
 });
 
@@ -42,14 +42,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // ✅ Serve frontend in production
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "/frontend/dist");
-  app.use(express.static(frontendPath));
+// if (process.env.NODE_ENV === "production") {
+//   const frontendPath = path.join(__dirname, "/frontend/dist");
+//   app.use(express.static(frontendPath));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(frontendPath, "index.html"))
-  );
-}
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(frontendPath, "index.html"))
+//   );
+// }
 
 // ❌ Error handling
 app.use(notFound);
