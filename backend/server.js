@@ -4,7 +4,7 @@ import express from "express";
 import chalk from "chalk";
 import cors from "cors";
 import path from "path";
-import fs from "fs";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
@@ -22,20 +22,16 @@ const app = express();
 
 // 🛠️ Middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
-// ✅ Ensure uploads folder exists
-const uploadDir = "uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
 
 // ✅ Serve uploads folder
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // ✅ API Health Check
-app.get("/api/health", (req, res) => {
+app.get("/api/blogsy25", (req, res) => {
   res.send("✅ API is running...");
 });
 
