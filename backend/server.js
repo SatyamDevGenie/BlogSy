@@ -2,7 +2,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import chalk from "chalk";
-import cors from "cors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
@@ -24,25 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "https://blogsy2025.netlify.app", // Netlify domain
-  "http://localhost:5173",            // Local Vite React development
-];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed for this origin"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS
-
-  })
-
-);
 
 
 
