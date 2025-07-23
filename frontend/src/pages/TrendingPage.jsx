@@ -12,7 +12,7 @@ export default function TrendingPage() {
   useEffect(() => {
     const fetchTrendingBlogs = async () => {
       try {
-        const response = await axios.get("https://blogsy-571e.onrender.com/api/blogs/trending");
+        const response = await axios.get("/api/blogs/trending");
         setTrendingBlogs(response.data);
       } catch (err) {
         setError("Failed to fetch trending blogs.");

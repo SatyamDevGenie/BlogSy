@@ -42,15 +42,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/upload", uploadRoutes);
 
-// ✅ Serve frontend in production
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "/frontend/dist");
-  app.use(express.static(frontendPath));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(frontendPath, "index.html"))
-  );
-}
 
 // ❌ Error handling
 app.use(notFound);

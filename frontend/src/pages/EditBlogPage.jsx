@@ -75,7 +75,7 @@ export default function EditBlogPage() {
     formImg.append("image", imageFile);
 
     try {
-      const { data } = await axios.post("https://blogsy-571e.onrender.com/api/upload/", formImg, {
+      const { data } = await axios.post("/api/upload", formImg, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
