@@ -341,7 +341,7 @@ export default function SingleBlogPage() {
           <img
             src={blog.image}
             alt={blog.title}
-            className="w-full h-56 sm:h-72 md:h-[400px] lg:h-[475px] object-cover transition-transform duration-500 hover:scale-105"
+            className="w-full h-56 sm:h-72 md:h-[400px] lg:h-[475px] object-fill transition-transform duration-500 hover:scale-105"
           />
         )}
 
