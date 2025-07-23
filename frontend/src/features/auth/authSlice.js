@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Set base URL
-const API_URL = "/api/auth";
+const API_URL = "https://blogsy-vmxj.onrender.com/api/auth";
 const USER_PROFILE = "/api/users";
 
 // Get user from localStorage

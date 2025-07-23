@@ -30,7 +30,7 @@ export default function CreateBlogPage() {
     formData.append("image", imageFile);
 
     try {
-      const { data } = await axios.post("/api/upload", formData, {
+      const { data } = await axios.post("https://blogsy-vmxj.onrender.com/api/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return data.filePath;
