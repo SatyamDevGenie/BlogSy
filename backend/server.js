@@ -25,15 +25,23 @@ app.use(express.json());
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "https://blogsy-2025.netlify.app", // Netlify domain
+  "https://blogsy2025.netlify.app", // Netlify domain
   "http://localhost:5173",            // Local Vite React development
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Enable this if you use cookies or JWT in headers
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed for this origin"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 
 
 
