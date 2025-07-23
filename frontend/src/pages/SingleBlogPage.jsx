@@ -407,54 +407,75 @@ export default function SingleBlogPage() {
             {/* Follow Button */}
             {user && !isOwner && blog.author && (
               <button
-                onClick={handleFollowToggle}
-                disabled={followLoading}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full shadow-md text-sm font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95
-        ${isFollowing
-                    ? "bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
-                  } ${followLoading ? "opacity-70 cursor-not-allowed" : ""}`}
-              >
-                {followLoading ? (
-                  <span className="inline-flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    {isFollowing ? "Unfollowing" : "Following"}
-                  </span>
-                ) : (
-                  <>
-                    {isFollowing ? (
-                      <>
-                        <UserMinusIcon className="h-4 w-4" />
-                        Following
-                      </>
-                    ) : (
-                      <>
-                        <UserPlusIcon className="h-4 w-4" />
-                        Follow
-                      </>
-                    )}
-                  </>
-                )}
-              </button>
+  onClick={handleFollowToggle}
+  disabled={followLoading}
+  className={`
+    relative flex items-center justify-center
+    gap-1 sm:gap-2 
+    sm:px-6 sm:py-3 max-w-fit p-4
+    rounded-full font-semibold 
+    text-xs sm:text-sm md:text-base
+    transition-all duration-300 transform
+    hover:scale-105 active:scale-95
+    ${
+      isFollowing
+        ? "bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300 shadow-md"
+        : "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white shadow-lg hover:shadow-blue-400/40 hover:from-indigo-500 hover:to-blue-600"
+    }
+    ${followLoading ? "opacity-70 cursor-not-allowed" : ""}
+  `}
+  style={{
+    minWidth: "auto",
+    boxShadow: isFollowing
+      ? "inset 0 1px 3px rgba(0,0,0,0.1)"
+      : "0 4px 14px rgba(59,130,246,0.4)",
+  }}
+>
+  {followLoading ? (
+    <span className="flex items-center">
+      <svg
+        className="animate-spin h-4 w-4 sm:h-5 sm:w-5"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span className="hidden sm:inline ml-1">
+        {isFollowing ? "Unfollowing" : "Following"}
+      </span>
+    </span>
+  ) : (
+    <>
+      {isFollowing ? (
+        <>
+          <UserMinusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="hidden sm:inline">Following</span>
+        </>
+      ) : (
+        <>
+          <UserPlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="hidden sm:inline">Follow</span>
+        </>
+      )}
+    </>
+  )}
+</button>
+
+
+
             )}
           </div>
 
@@ -518,90 +539,90 @@ export default function SingleBlogPage() {
         </div>
 
 
-      {/* Comment Section */}
-<div className="mt-12 px-4 sm:px-6">
-  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-    💬 Comments
-    <span className="text-sm font-medium text-gray-500">({blog.comments?.length || 0})</span>
-  </h2>
+        {/* Comment Section */}
+        <div className="mt-12 px-4 sm:px-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            💬 Comments
+            <span className="text-sm font-medium text-gray-500">({blog.comments?.length || 0})</span>
+          </h2>
 
-  {/* Add Comment Form */}
-  {user ? (
-    <form
-      onSubmit={handleCommentSubmit}
-      className="mb-8 flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-5 py-3 shadow-md border border-gray-200"
-    >
-      <input
-        type="text"
-        placeholder="Write your comment..."
-        className="flex-1 bg-transparent outline-none text-sm sm:text-base text-gray-700 placeholder-gray-400"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        disabled={loading}
-      />
-      <button
-        type="submit"
-        className={`px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300
+          {/* Add Comment Form */}
+          {user ? (
+            <form
+              onSubmit={handleCommentSubmit}
+              className="mb-8 flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-5 py-3 shadow-md border border-gray-200"
+            >
+              <input
+                type="text"
+                placeholder="Write your comment..."
+                className="flex-1 bg-transparent outline-none text-sm sm:text-base text-gray-700 placeholder-gray-400"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                disabled={loading}
+              />
+              <button
+                type="submit"
+                className={`px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300
           ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-        disabled={loading}
-      >
-        {loading ? "Posting..." : "Post"}
-      </button>
-    </form>
-  ) : (
-    <p className="text-gray-500 text-sm sm:text-base mb-6 italic">
-      Login to post a comment.
-    </p>
-  )}
-
-  {/* Comments List */}
-  <div className="max-h-96 overflow-y-auto space-y-5 pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-    {blog.comments?.length > 0 ? (
-      blog.comments.map((comment, index) => (
-        <div
-          key={comment._id || index}
-          className="flex items-start gap-4 p-4 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-[1.02]"
-        >
-          {/* Profile Avatar */}
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white font-bold text-lg flex items-center justify-center shadow-md">
-              {comment.user?.username?.charAt(0).toUpperCase() || "U"}
-            </div>
-          </div>
-
-          {/* Comment Content */}
-          <div className="flex-1">
-            <div className="flex justify-between items-center">
-              <h4 className="font-semibold text-gray-800 text-base">
-                {comment.user?.username || "User"}
-              </h4>
-              <span className="text-xs text-gray-400">{timeAgo(comment.createdAt)}</span>
-            </div>
-            <p className="text-gray-700 text-sm sm:text-base mt-1 leading-relaxed">
-              {comment.text || comment.comment}
+                disabled={loading}
+              >
+                {loading ? "Posting..." : "Post"}
+              </button>
+            </form>
+          ) : (
+            <p className="text-gray-500 text-sm sm:text-base mb-6 italic">
+              Login to post a comment.
             </p>
+          )}
 
-            {/* Actions */}
-            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-              <button className="hover:text-blue-500 transition">Reply</button>
-              <button className="hover:text-red-500 transition">Report</button>
-            </div>
+          {/* Comments List */}
+          <div className="max-h-96 overflow-y-auto space-y-5 pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            {blog.comments?.length > 0 ? (
+              blog.comments.map((comment, index) => (
+                <div
+                  key={comment._id || index}
+                  className="flex items-start gap-4 p-4 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-[1.02]"
+                >
+                  {/* Profile Avatar */}
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white font-bold text-lg flex items-center justify-center shadow-md">
+                      {comment.user?.username?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  </div>
+
+                  {/* Comment Content */}
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-semibold text-gray-800 text-base">
+                        {comment.user?.username || "User"}
+                      </h4>
+                      <span className="text-xs text-gray-400">{timeAgo(comment.createdAt)}</span>
+                    </div>
+                    <p className="text-gray-700 text-sm sm:text-base mt-1 leading-relaxed">
+                      {comment.text || comment.comment}
+                    </p>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                      <button className="hover:text-blue-500 transition">Reply</button>
+                      <button className="hover:text-red-500 transition">Report</button>
+                    </div>
+                  </div>
+
+                  {/* Emoji Reaction */}
+                  <button
+                    className="flex items-center justify-center text-gray-400 hover:text-yellow-500 transition transform hover:scale-125"
+                    title="React"
+                  >
+                    😊
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600 text-center text-sm sm:text-base">No comments yet. Be the first one!</p>
+            )}
           </div>
-
-          {/* Emoji Reaction */}
-          <button
-            className="flex items-center justify-center text-gray-400 hover:text-yellow-500 transition transform hover:scale-125"
-            title="React"
-          >
-            😊
-          </button>
         </div>
-      ))
-    ) : (
-      <p className="text-gray-600 text-center text-sm sm:text-base">No comments yet. Be the first one!</p>
-    )}
-  </div>
-</div>
 
 
       </div>
