@@ -30,7 +30,7 @@ export default function EditBlogPage() {
             Authorization: `Bearer ${user.token}`,
           },
         };
-        const res = await axios.get(`/api/blogs/${id}`, config);
+        const res = await axios.get(`https://blogsy-571e.onrender.com/api/blogs/${id}`, config);
         setFormData({
           title: res.data.title,
           content: res.data.content,
@@ -75,7 +75,7 @@ export default function EditBlogPage() {
     formImg.append("image", imageFile);
 
     try {
-      const { data } = await axios.post("/api/upload/", formImg, {
+      const { data } = await axios.post("https://blogsy-571e.onrender.com/api/upload/", formImg, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
