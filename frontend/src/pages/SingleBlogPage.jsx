@@ -39,7 +39,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `/api/blogs/${id}`,
+        `https://blogsy-571e.onrender.com/api/blogs/${id}`,
         config
       );
       setBlog(res.data);
