@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "https://blogsy2025.netlify.app", // Netlify domain
+  "https://blogsy-2025.netlify.app", // Netlify domain
   "http://localhost:5173",            // Local Vite React development
 ];
 
