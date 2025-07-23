@@ -24,16 +24,16 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// const allowedOrigins = [
-//   "https://blogsy2025.netlify.app", // Netlify domain
-//   "http://localhost:5173",            // Local Vite React development
-// ];
+const allowedOrigins = [
+  "https://blogsy2025.netlify.app", // Netlify domain
+  "http://localhost:5173",            // Local Vite React development
+];
 
-// app.use(cors({
-//   origin: allowedOrigins,
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   credentials: true, // Enable this if you use cookies or JWT in headers
-// }));
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // Enable this if you use cookies or JWT in headers
+}));
 
 
 
@@ -53,14 +53,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // ✅ Serve frontend in production
-// if (process.env.NODE_ENV === "production") {
-//   const frontendPath = path.join(__dirname, "/frontend/dist");
-//   app.use(express.static(frontendPath));
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "/frontend/dist");
+  app.use(express.static(frontendPath));
 
-//   app.get("*", (req, res) =>
-//     res.sendFile(path.resolve(frontendPath, "index.html"))
-//   );
-// }
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(frontendPath, "index.html"))
+  );
+}
 
 // ❌ Error handling
 app.use(notFound);
