@@ -30,7 +30,7 @@ export default function EditBlogPage() {
             Authorization: `Bearer ${user.token}`,
           },
         };
-        const res = await axios.get(`https://blogsy-yttu.onrender.com/api/blogs/${id}`, config);
+        const res = await axios.get(`/api/blogs/${id}`, config);
         setFormData({
           title: res.data.title,
           content: res.data.content,

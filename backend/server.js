@@ -23,7 +23,18 @@ const app = express();
 // 🛠️ Middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+
+// const allowedOrigins = [
+//   "https://blogsy2025.netlify.app", // Netlify domain
+//   "http://localhost:5173",            // Local Vite React development
+// ];
+
+// app.use(cors({
+//   origin: allowedOrigins,
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true, // Enable this if you use cookies or JWT in headers
+// }));
+
 
 
 // ✅ Serve uploads folder
